@@ -1,12 +1,12 @@
-title: Minimalist
-owner: Max Muster
-email:
-description: A simple and minimalistic jekyll blogging theme
+title: Soroush's Homepage
+owner: Mohammad Soroush Esnaashari
+email: soroushesnaashari4@gmail.com
+description: An Energetic Researcher
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 language: en
-twitter_username:
-github_username:
+twitter_username: srshesn
+github_username: soroushesnaashari
 disqus_username: 
 # Build settings
 markdown: kramdown
