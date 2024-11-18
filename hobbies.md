@@ -9,7 +9,6 @@ permalink: /hobbies/
 * `Technology` 🖱️💻<br>
 * `Music` 🎧<br>
 * `Movie` 🎬<br>
-* `Playing Piano` 🎹<br>
 * `Playing Video Games` 🎮<br>
 
 ### Sport
