@@ -11,18 +11,16 @@ I’m Soroush, an Industrial Engineer, with a strong foundation in Mathematics, 
 
 In the last two years of my studies, I spent countless hours researching about some related and new fields like Machine Learning, Deep Learning and Data Science. I was excited to blend these cutting-edge areas with my foundation in industrial engineering. I’m especially interested in how AI and data-driven strategies can unlock new efficiencies and insights. Whether analyzing complex systems or working on innovative AI solutions, I enjoy the challenge of turning data into decisions that make a real impact.
 
-With experience in project management, data science, machine learning, and applied analysis, I thrive in environments that allow me to tackle new challenges and continuously expand my skill set. I’m especially excited about exploring new fields like Natural Language Processing (NLP) and Computer Vision which open up even more possibilities for innovative, data-driven solutions. I look forward to continue my journey as energetic as possible. Let’s dive into the endless world of learning!
+With experience in project management, data science, machine learning, and applied analysis, I thrive in environments that allow me to tackle new challenges and continuously expand my skill set. I’m especially excited about exploring new fields like Natural Language Processing (NLP) and Computer Vision which open up even more possibilities for innovative and data-driven solutions. I look forward to continue my journey as energetic as possible. Let’s dive into the endless world of learning!
 
 <hr>
 
 ### 👨🏻‍💻 Research Interests
 
 * <a href="/or/">Operation Research</a>
-* `Machine Learning`
-* `Data Science`
-* `Deep Learning`
-* `Project Management`
-* `Artificial Intelligence`
-* `Optimization`
-* `Healthcare`
-
+* <a href="/ml&dl/">Machine Learning</a>
+* Data Science
+* <a href="/ml&dl/">Deep Learning</a>
+* <a href="/pm/">Project Management</a>
+* Artificial Intelligence
+* Healthcare
