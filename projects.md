@@ -11,6 +11,12 @@ You can access my code on [`Kaggle`](https://www.kaggle.com/soroushesnaashari) o
 <hr>
 <br>
 
+* ### `Customer Clustering (Nov 2024)`<br>
+An Unsupervised Machine Learning Project which was about Clustering the customers using some unsupervised algorithms such as **K-Means**, **DBSCAN** and **Gussian Mixture Model (GMM)**, also on the GitHub version there is an emphasising on finding which one of the StandardScaler or MinMaxScaler is more appropriate for modelling. You can access the code on either GitHub or Kaggle.<br>
+[Repository on GitHub](https://github.com/soroushesnaashari/Customer-Clustering) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/customer-clustering)
+
+<br>
+
 * ### `Phone Price Prediction (June 2024)`<br>
 [Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/phone-price-prediction-dt-rf-svm)
 
@@ -24,7 +30,7 @@ In this **ML** project, I focus on predicting personal bank loan approval using 
 
 * ### `Car Price Prediction (May 2024)`<br>
 In this ML project, I used **"linear regression"** to predict car prices based on various features such as year, present price, kilometers driven, fuel type, seller type, and transmission. The model was trained to identify patterns in the dataset and accurately estimate car prices, helping to understand how different factors impact the value of a vehicle.<br>
-[Code on Kaggle](https://kaggle.com/code/soroushesnaashari/car-price-linear-regression)
+[Repository on GitHub](https://github.com/soroushesnaashari/Car-Price-Prediction) · [Code on Kaggle](https://kaggle.com/code/soroushesnaashari/car-price-linear-regression)
 
 <br>
 

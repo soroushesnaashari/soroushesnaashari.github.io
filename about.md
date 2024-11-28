@@ -3,8 +3,6 @@ layout: default
 title: About
 permalink: /about/
 ---
-<br>
-
 ### 👋🏼 Hey there!
 
 I’m Soroush, an Industrial Engineer, with a strong foundation in Mathematics, Management, Analytical Thinking and Problem Solving who studied at the Islamic Azad University Central Tehran Branch. My academic journey culminated in a thesis on AI and its applications in industrial engineering, where I had the chance to explore various topics under the supervision of [Prof. Parisa Shahnazari-Shahrezaei](https://www.linkedin.com/in/parisa-shahnazari-shahrezaei-31854042/). This experience deepened my passion for Artificial Intelligence and inspired me to see how AI and it's tools can transform traditional engineering practices. 
@@ -13,7 +11,9 @@ In the last two years of my studies, I spent countless hours researching about s
 
 With experience in project management, data science, machine learning, and applied analysis, I thrive in environments that allow me to tackle new challenges and continuously expand my skill set. I’m especially excited about exploring new fields like Natural Language Processing (NLP) and Computer Vision which open up even more possibilities for innovative and data-driven solutions. I look forward to continue my journey as energetic as possible. Let’s dive into the endless world of learning!
 
+<br>
 <hr>
+<br>
 
 ### 👨🏻‍💻 Research Interests
 
