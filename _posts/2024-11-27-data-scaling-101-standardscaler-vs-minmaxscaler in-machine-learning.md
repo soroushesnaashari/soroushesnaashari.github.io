@@ -48,7 +48,9 @@ Of course, StandardScaler isn’t perfect for every situation. If your data has 
 While StandardScaler focuses on balancing data by removing bias, **MinMaxScaler** is more like a precision tool that resizes everything proportionally within a defined range. Typically, this range is set between 0 and 1, though you can adjust it based on your needs.
 
 The mathematical operation for MinMaxScaler is straightforward:
+<br>
 <center>X scaled = ( X - X min ) / ( X max - X min )</center>
+<br>
 Where:
 
 - **x** is your original data point
