@@ -5,11 +5,11 @@ date:   2024-11-28 01:03:29 +0200
 categories: MachineLearning DeepLearning StandardScaler MinMaxScaler
 comments: false
 ---
-Imagine trying to compare an IELTS score of 7 with a TOEFL score of 90. Without understanding that these exams have completely different scaling systems, any comparison would be meaningless. The same principle applies in Machine Learning: if your features are on different scales, your model can’t make fair comparisons, and your results will suffer.
+Imagine trying to compare an IELTS score of 7 with a TOEFL score of 50. Without understanding that these exams have completely different scaling systems, any comparison would be meaningless. The same principle applies in Machine Learning: if your features are on different scales, your model can’t make fair comparisons, and your results will suffer.
 In this article, we’ll explore two popular scaling methods **StandardScaler** and **MinMaxScaler** to understand their philosophy, their mathematics and when to use each one. By the end, you’ll see how these simple tools can make a big difference in your projects.
 
 <!--more-->
-![Photo is from [Here](https://vitalflux.com/wp-content/uploads/2023/12/standard-scaler-vs-minmaxscaler.png)](/assets/images/Thumbnail.png)
+You can see more visualize version [here](https://medium.com/@soroushesnaashari/data-scaling-101-standardscaler-vs-minmaxscaler-in-machine-learning-ff88b7810a48) on Medium.
 
 I faced this matter recently while working on [Customer Clustering](https://github.com/soroushesnaashari/Customer-Clustering) project. At first, my results were disastrous, clusters made no sense, and the model seemed confused. It wasn’t until I revisited my code that I realized I’d skipped a critical step: scaling the data. A quick adjustment, and suddenly, everything clicked.
 
@@ -17,12 +17,15 @@ Scaling isn’t just about numbers, it’s about fairness and accuracy. It’s l
 
 <br>
 
-#### StandardScaler: Setting the Stage for Fair Comparisons
+`StandardScaler: Setting the Stage for Fair Comparisons`
 
 If I had to summarize **StandardScaler** in a sentence, I’d say: _it’s the guy who insists on fairness by removing bias and balancing everything_. But what does that mean in practice? StandardScaler transforms your data by removing the mean and scaling each feature to have unit variance. In simpler terms, it ensures that your data is centered around zero with a consistent spread.
 
 Here’s the mathematical behind it:
-![](/assets/images/StandardScaler.png)
+<div style="width:20%; margin: auto;">
+
+![](/assets/images/StandardScaler.png) 
+</div>
 Where:
 
 - **x** is your data point
@@ -41,7 +44,7 @@ Of course, StandardScaler isn’t perfect for every situation. If your data has 
 
 <br>
 
-#### MinMaxScaler: Rescaling for Simplicity and Precision
+`MinMaxScaler: Rescaling for Simplicity and Precision`
 
 While StandardScaler focuses on balancing data by removing bias, **MinMaxScaler** is more like a precision tool that resizes everything proportionally within a defined range. Typically, this range is set between 0 and 1, though you can adjust it based on your needs.
 
@@ -62,7 +65,7 @@ In summary, **MinMaxScaler** might be the best solution for rescaling when you n
 
 <br>
 
-#### Now it is the time for A Side-by-Side Comparison
+`Now it is the time for A Side-by-Side Comparison`
 
 Choosing between **StandardScaler** and **MinMaxScaler** is like selecting the right tool for a specific job, they both scale data, but each does it in a different way, suited for different situations. Here’s a breakdown of how they compare:
 
@@ -80,7 +83,7 @@ Choosing between **StandardScaler** and **MinMaxScaler** is like selecting the r
 
 <br>
 
-#### When to Use Which?
+`When to Use Which?`
 
 If your data has a normal distribution and your model requires consistent, centered data, **StandardScaler** is the better option. It’s also more suited for algorithms that are sensitive to variance. If you need bounded values for algorithms that work with ranges or are particularly sensitive to input scales, like _Neural Networks_, **MinMaxScaler** should be your choice.
 
@@ -88,7 +91,7 @@ In short, both scalers have their place in Machine Learning and Deep Learning wo
 
 <br>
 
-#### Conclusion: Scaling for Success
+`Conclusion: Scaling for Success`
 
 Scaling your data might seem like a small step in the machine learning pipeline, but trust me, it’s a game changer. Whether you’re working with **StandardScaler** or **MinMaxScaler**, choosing the right scaler is crucial to get your model performing at its best. Just like a car needs proper fuel to run smoothly, your model needs properly scaled data to make accurate predictions.
 
@@ -98,7 +101,7 @@ But, no matter which one you choose, always keep an eye out for those sneaky out
 
 <br>
 
-#### Ending
+`Ending`
 
 Scaling data might seem like a technical detail, but it reminds me of something bigger in life. As I mentioned earlier, think about how we compare ourselves to others, often forgetting that everyone is on a different scale. Just like in machine learning, if we don’t take time to adjust for context, our comparisons can be unfair.
 
@@ -110,3 +113,4 @@ Additional useful links:
 
 - [StandardScaler document](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) at scikit-learn
 - [MinMaxScaler document](https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.MinMaxScaler.html) at scikit-learn
+<br>

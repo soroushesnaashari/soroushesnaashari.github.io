@@ -3,8 +3,6 @@ layout: default
 title: Projects
 permalink: /projects/
 ---
-<br>
-
 You can access my code on [`Kaggle`](https://www.kaggle.com/soroushesnaashari) or [`GitHub`](https://github.com/soroushesnaashari)
 
 <br>
