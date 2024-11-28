@@ -21,7 +21,7 @@ Scaling isn’t just about numbers, it’s about fairness and accuracy. It’s l
 
 If I had to summarize **StandardScaler** in a sentence, I’d say: _it’s the guy who insists on fairness by removing bias and balancing everything_. But what does that mean in practice? StandardScaler transforms your data by removing the mean and scaling each feature to have unit variance. In simpler terms, it ensures that your data is centered around zero with a consistent spread.
 
-Here’s the mathematical behind it:
+Here’s the mathematical behind it:<br>
 <br>
 
 <center>z = ( x - μ ) / σ</center>
@@ -48,7 +48,7 @@ Of course, StandardScaler isn’t perfect for every situation. If your data has 
 
 While StandardScaler focuses on balancing data by removing bias, **MinMaxScaler** is more like a precision tool that resizes everything proportionally within a defined range. Typically, this range is set between 0 and 1, though you can adjust it based on your needs.
 
-The mathematical operation for MinMaxScaler is straightforward:
+The mathematical operation:<br>
 <br>
 
 <center>X scaled = ( X - X min ) / ( X max - X min )</center>
