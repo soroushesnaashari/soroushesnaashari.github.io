@@ -23,6 +23,7 @@ If I had to summarize **StandardScaler** in a sentence, I’d say: _it’s the g
 
 Here’s the mathematical behind it:
 <br>
+
 <center>z = ( x - μ ) / σ</center>
 <br>
 Where:
@@ -49,6 +50,7 @@ While StandardScaler focuses on balancing data by removing bias, **MinMaxScaler*
 
 The mathematical operation for MinMaxScaler is straightforward:
 <br>
+
 <center>X scaled = ( X - X min ) / ( X max - X min )</center>
 <br>
 Where:
