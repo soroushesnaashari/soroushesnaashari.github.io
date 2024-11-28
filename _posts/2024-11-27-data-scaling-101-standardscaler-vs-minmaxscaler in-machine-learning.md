@@ -9,7 +9,7 @@ Imagine trying to compare an IELTS score of 7 with a TOEFL score of 50. Without 
 In this article, we’ll explore two popular scaling methods **StandardScaler** and **MinMaxScaler** to understand their philosophy, their mathematics and when to use each one. By the end, you’ll see how these simple tools can make a big difference in your projects.
 
 <!--more-->
-You can see more visualize version [here](https://medium.com/@soroushesnaashari/data-scaling-101-standardscaler-vs-minmaxscaler-in-machine-learning-ff88b7810a48) on Medium.
+_You can see more visualized version [here](https://medium.com/@soroushesnaashari/data-scaling-101-standardscaler-vs-minmaxscaler-in-machine-learning-ff88b7810a48) on Medium_
 
 I faced this matter recently while working on [Customer Clustering](https://github.com/soroushesnaashari/Customer-Clustering) project. At first, my results were disastrous, clusters made no sense, and the model seemed confused. It wasn’t until I revisited my code that I realized I’d skipped a critical step: scaling the data. A quick adjustment, and suddenly, everything clicked.
 
@@ -22,10 +22,9 @@ Scaling isn’t just about numbers, it’s about fairness and accuracy. It’s l
 If I had to summarize **StandardScaler** in a sentence, I’d say: _it’s the guy who insists on fairness by removing bias and balancing everything_. But what does that mean in practice? StandardScaler transforms your data by removing the mean and scaling each feature to have unit variance. In simpler terms, it ensures that your data is centered around zero with a consistent spread.
 
 Here’s the mathematical behind it:
-<div style="width:20%; margin: auto;">
-
-![](/assets/images/StandardScaler.png) 
-</div>
+<br>
+<center>z = ( x - μ ) / σ</center>
+<br>
 Where:
 
 - **x** is your data point
@@ -49,7 +48,7 @@ Of course, StandardScaler isn’t perfect for every situation. If your data has 
 While StandardScaler focuses on balancing data by removing bias, **MinMaxScaler** is more like a precision tool that resizes everything proportionally within a defined range. Typically, this range is set between 0 and 1, though you can adjust it based on your needs.
 
 The mathematical operation for MinMaxScaler is straightforward:
-![](/assets/images/MinMaxScaler.png)
+<center>X scaled = ( X - X min ) / ( X max - X min )</center>
 Where:
 
 - **x** is your original data point
@@ -113,4 +112,5 @@ Additional useful links:
 
 - [StandardScaler document](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) at scikit-learn
 - [MinMaxScaler document](https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.MinMaxScaler.html) at scikit-learn
+- [Medium](https://medium.com/@soroushesnaashari)
 <br>
