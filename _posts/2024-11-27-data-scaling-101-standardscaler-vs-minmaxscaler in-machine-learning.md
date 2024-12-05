@@ -9,8 +9,6 @@ Imagine trying to compare an IELTS score of 7 with a TOEFL score of 50. Without 
 In this article, we’ll explore two popular scaling methods **StandardScaler** and **MinMaxScaler** to understand their philosophy, their mathematics and when to use each one. By the end, you’ll see how these simple tools can make a big difference in your projects.
 
 <!--more-->
-_You can see more visualized version [here](https://medium.com/@soroushesnaashari/data-scaling-101-standardscaler-vs-minmaxscaler-in-machine-learning-ff88b7810a48) on Medium_
-
 I faced this matter recently while working on [Customer Clustering](https://github.com/soroushesnaashari/Customer-Clustering) project. At first, my results were disastrous, clusters made no sense, and the model seemed confused. It wasn’t until I revisited my code that I realized I’d skipped a critical step: scaling the data. A quick adjustment, and suddenly, everything clicked.
 
 Scaling isn’t just about numbers, it’s about fairness and accuracy. It’s like leveling a playing field in sports or ensuring all instruments in a band play harmoniously. Even in life, when we compare ourselves to others without accounting for our unique contexts, we often end up with skewed and inaccurate conclusions.
@@ -116,5 +114,4 @@ Additional useful links:
 
 - [StandardScaler document](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html) at scikit-learn
 - [MinMaxScaler document](https://scikit-learn.org/1.5/modules/generated/sklearn.preprocessing.MinMaxScaler.html) at scikit-learn
-- [Medium](https://medium.com/@soroushesnaashari)
 <br>
