@@ -11,5 +11,7 @@ In this article, we’ll explore two popular scaling methods StandardScaler and 
 <!--more-->
 <br>
 
-To read the full version of this article, which has published on [Towards AI](https://pub.towardsai.net/) publication, you can use the link below:<br>
-[Data Scaling 101: StandardScaler vs MinMaxScaler in Machine Learning](https://medium.com/towards-artificial-intelligence/data-scaling-101-standardscaler-vs-minmaxscaler-e8f78d77283f)
+To read the full version of this article, which has published on [Towards AI](https://pub.towardsai.net/) publication, use the link below:<br>
+<br>
+
+[Data Scaling 101 on Medium](https://medium.com/towards-artificial-intelligence/data-scaling-101-standardscaler-vs-minmaxscaler-e8f78d77283f)

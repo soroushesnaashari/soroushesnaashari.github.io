@@ -9,13 +9,12 @@ permalink: /hobbies/
 * `Technology` 🖱️💻<br>
 * `Music` 🎧<br>
 * `Movie` 🎬<br>
-* `Playing Video Games` 🎮<br>
+* `Video Game` 🎮<br>
 
 ### Sport
 * `Football` ⚽️<br>
-* `Basketball` 🏀<br>
 * `MMA` 🥊<br>
-* `Driving` 🏎️<br>
+* `Basketball` 🏀<br>
 * `Swimming` 🏊🏼‍♂️<br>
 * `Handball` 🤾🏻‍♂️<br>
 * `Chess` ♟️
