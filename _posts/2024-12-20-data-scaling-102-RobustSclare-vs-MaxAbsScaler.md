@@ -13,6 +13,5 @@ In this article, we will go beyond the basics and explore other powerful scaling
 <br>
 
 To read the full version of this article, which has published on [DataDrivenInvestor](https://medium.datadriveninvestor.com/) publication, use the link below:<br>
-
 [Data Scaling 102 on Medium](https://medium.com/datadriveninvestor/data-scaling-102-beyond-the-basics-exploring-robustscaler-maxabsscaler-and-other-scaling-methods-383dd2921f69)
 <br>
