@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "- Data Scaling 102: Beyond the Basics, Exploring RobustScaler, MaxAbsScaler and Other Scaling Methods"
+title:  "4- Data Scaling 102: Beyond the Basics, Exploring RobustScaler, MaxAbsScaler and Other Scaling Methods"
 date:   2024-12-20 06:03:29 +0200
 categories: MachineLearning DeepLearning RobustScaler MaxAbsScaler
 comments: false

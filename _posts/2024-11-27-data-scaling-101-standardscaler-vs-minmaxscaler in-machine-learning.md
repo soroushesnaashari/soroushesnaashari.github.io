@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "- Data Scaling 101: StandardScaler vs MinMaxScaler in Machine Learning"
+title:  "3- Data Scaling 101: StandardScaler vs MinMaxScaler in Machine Learning"
 date:   2024-11-28 06:03:29 +0200
 categories: MachineLearning DeepLearning StandardScaler MinMaxScaler
 comments: false

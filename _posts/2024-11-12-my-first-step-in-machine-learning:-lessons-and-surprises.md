@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "- How Was My First Steps in Machine Learning: Lessons and Surprises"
+title:  "2- How Was My First Steps in Machine Learning: Lessons and Surprises"
 date:   2024-11-12 01:03:29 +0200
 categories: MachineLearning
 comments: false
