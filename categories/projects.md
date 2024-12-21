@@ -9,6 +9,12 @@ You can access my code on [`Kaggle`](https://www.kaggle.com/soroushesnaashari) o
 <hr>
 <br>
 
+* ### `Market Analyzing (Dec 2024)`<br>
+This project is a comprehensive analysis of a financial market dataset, focusing on preprocessing, visualization and predictive modeling. The objective is to explore various machine learning algorithms to predict stock prices and evaluate their effectiveness.
+[Repository on GitHub](https://github.com/soroushesnaashari/Market-Analyzing) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/market-analyzing)
+
+<br>
+
 * ### `Customer Clustering (Nov 2024)`<br>
 An Unsupervised Machine Learning Project which was about Clustering the customers using some unsupervised algorithms such as **K-Means**, **DBSCAN** and **Gussian Mixture Model (GMM)**, also on the GitHub version there is an emphasising on finding which one of the StandardScaler or MinMaxScaler is more appropriate for modelling. You can access the code on either GitHub or Kaggle.<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Customer-Clustering) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/customer-clustering)
@@ -16,7 +22,8 @@ An Unsupervised Machine Learning Project which was about Clustering the customer
 <br>
 
 * ### `Phone Price Prediction (June 2024)`<br>
-[Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/phone-price-prediction-dt-rf-svm)
+The Phone Price Prediction project aims to classify mobile phones into different price ranges based on their technical specifications. Using machine learning algorithms, the project evaluates features like battery power, RAM, processor cores and more to predict the price category of a phone. This project demonstrates data preprocessing, feature selection and model optimization techniques to achieve accurate predictions.
+[Repository on GitHub](https://github.com/soroushesnaashari/Phone-Price-Prediction) · [Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/phone-price-prediction-dt-rf-svm)
 
 <br>
 
