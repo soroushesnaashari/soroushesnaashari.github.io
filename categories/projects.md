@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Projects
-permalink: /projects/
+permalink: /categories/projects/
 ---
 You can access my code on [`Kaggle`](https://www.kaggle.com/soroushesnaashari) or [`GitHub`](https://github.com/soroushesnaashari)
 

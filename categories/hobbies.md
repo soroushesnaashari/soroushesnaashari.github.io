@@ -1,7 +1,7 @@
 ---
 layout: default
 title: My Hobbies
-permalink: /hobbies/
+permalink: /categories/hobbies/
 ---
 <br>
 
