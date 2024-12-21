@@ -10,7 +10,7 @@ You can access my code on [`Kaggle`](https://www.kaggle.com/soroushesnaashari) o
 <br>
 
 * ### `Market Analyzing (Dec 2024)`<br>
-This project is a comprehensive analysis of a financial market dataset, focusing on preprocessing, visualization and predictive modeling. The objective is to explore various machine learning algorithms to predict stock prices and evaluate their effectiveness.
+This project is a comprehensive analysis of a financial market dataset, focusing on preprocessing, visualization and predictive modeling. The objective is to explore various machine learning algorithms to predict stock prices and evaluate their effectiveness.<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Market-Analyzing) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/market-analyzing)
 
 <br>
