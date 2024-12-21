@@ -6,10 +6,8 @@ categories: introducing
 comments: false
 ---
 Hello, and welcome to my `World`!
-
-<!--more-->
-
 I’m so glad you’re here. This blog marks the start of something I’ve wanted to create for a long time—a space to connect, share, and explore. In a way, this is my online home, a place where I can introduce myself and give you a glimpse of what am I doing.
+<!--more-->
 
 Outside of my work, I love exploring new ideas, whether it’s diving into a great music, tackling a new skill, or simply taking a walk and letting my mind wander. I think there’s so much we can learn by looking at the world with an open mind. This sense of curiosity has brought me to many interesting places, and it’s what inspires me to keep growing.
 

@@ -5,12 +5,8 @@ date:   2024-11-12 01:03:29 +0200
 categories: MachineLearning
 comments: false
 ---
-
-
+As someone with a background in industrial engineering, I had always been attracted by solving complex problems and searching for the way to enhance the efficiency of systems. When I, about a year ago for the first time, started exploring machine learning, I knew it was a powerful tool with enormous potential, though at that time, I did not realize fully how it would expand my perspective. It has been an exciting journey, challenging and full of unexpected lessons. In this post, I’ll share a bit about what I’ve learned and some surprises that came along the way.
 <!--more-->
-
-As someone with a background in industrial engineering, I had always been attracted by solving complex problems and searching for the way to enhance the efficiency of systems. When I, about a year ago for the first time, started exploring machine learning, I knew it was a powerful tool with enormous potential, though at that time, I did not realize fully how it would expand my perspective. It has been an exciting journey, challenging, and full of unexpected lessons. In this post, I’ll share a bit about what I’ve learned and some surprises that came along the way.
-
 
 `Finding a New Kind of Problem-Solving`
 
