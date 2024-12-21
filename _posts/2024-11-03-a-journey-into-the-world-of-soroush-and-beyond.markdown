@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "A Journey into the World of Soroush and Beyond!"
+title:  "- A Journey into the World of Soroush and Beyond!"
 date:   2024-11-03 01:03:29 +0200
 categories: introducing
 comments: false
