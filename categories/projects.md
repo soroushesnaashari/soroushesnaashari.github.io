@@ -4,9 +4,9 @@ title: Projects
 permalink: /categories/projects/
 ---
 You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [`Kaggle`](https://www.kaggle.com/soroushesnaashari)
-<br>
 
-#
+<br>
+<hr>
 <br>
 
 * ### `Market Analyzing (Dec 2024)`<br>
