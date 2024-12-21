@@ -1,7 +1,7 @@
 ---
 layout: default
 title: About
-permalink: /categories/about/
+permalink: /categories/about/about/
 ---
 ### 👋🏼 Hey there!
 
@@ -17,10 +17,10 @@ With experience in project management, data science, machine learning and applie
 
 ### 👨🏻‍💻 Research Interests
 
-* <a href="/or/">Operation Research</a>
-* <a href="/ml&dl/">Machine Learning</a>
+* <a href="/categories/about/or/">Operation Research</a>
+* <a href="/categories/about/ml&dl/">Machine Learning</a>
 * Data Science
-* <a href="/ml&dl/">Deep Learning</a>
-* <a href="/pm/">Project Management</a>
+* <a href="/categories/about/ml&dl/">Deep Learning</a>
+* <a href="/categories/about/pm/">Project Management</a>
 * Artificial Intelligence
 * Healthcare

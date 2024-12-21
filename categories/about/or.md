@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Operation Research
-permalink: /or/
+permalink: /categories/about/or/
 ---
 <br>
 

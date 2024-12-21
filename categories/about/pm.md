@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Project Management
-permalink: /pm/
+permalink: /categories/about/pm/
 ---
 <br>
 

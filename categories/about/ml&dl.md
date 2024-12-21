@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Machine Learning and Deep Learning
-permalink: /ml&dl/
+permalink: /categories/about/ml&dl/
 ---
 <br>
 
