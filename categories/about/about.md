@@ -19,8 +19,8 @@ With experience in project management, data science, machine learning and applie
 
 * <a href="/categories/about/or/">Operation Research</a>
 * <a href="/categories/about/ml&dl/">Machine Learning</a>
-* Data Science
 * <a href="/categories/about/ml&dl/">Deep Learning</a>
+* Data Science
 * <a href="/categories/about/pm/">Project Management</a>
 * Artificial Intelligence
 * Healthcare
