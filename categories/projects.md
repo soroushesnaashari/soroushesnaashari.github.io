@@ -41,7 +41,7 @@ In this ML project, I used **"linear regression"** to predict car prices based o
 
 * ### `Universities' World Ranking (Apr 2024)`<br>
 In this project, I analyze universities across the world, utilizing various visualizations to highlight patterns and distributions within the dataset.<br>
-[Code on Kaggle](https://kaggle.com/code/soroushesnaashari/universities-world-ranking)
+[Repository on GitHub](https://github.com/soroushesnaashari/Universities-World-Ranking) · [Code on Kaggle](https://kaggle.com/code/soroushesnaashari/universities-world-ranking)
 
 <br>
 
