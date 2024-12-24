@@ -10,11 +10,10 @@ permalink: /categories/hobbies/
 * `Music` 🎧<br>
 * `Movie` 🎬<br>
 * `Video Game` 🎮<br>
-
-### Sport
-* `Football` ⚽️<br>
-* `MMA` 🥊<br>
-* `Basketball` 🏀<br>
-* `Swimming` 🏊🏼‍♂️<br>
-* `Handball` 🤾🏻‍♂️<br>
-* `Chess` ♟️
+* `Sports`
+    * `Football` ⚽️<br>
+    * `MMA` 🥊<br>
+    * `Basketball` 🏀<br>
+    * `Swimming` 🏊🏼‍♂️<br>
+    * `Handball` 🤾🏻‍♂️<br>
+    * `Chess` ♟️
