@@ -29,7 +29,7 @@ The Phone Price Prediction project aims to classify mobile phones into different
 
 * ### `Personal Bank Loan (June 2024)`<br>
 In this **ML** project, I focus on predicting personal bank loan approval using **"Logistic Regression"**, **"Naive Bayes"** and **"KNN"** algorithms. The goal is to analyze customer data such as age, income, and education to predict whether a loan application will be approved or not.<br>
-[Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/bank-loan-logistic-regression-naive-bayes-knn)
+[Repository on GitHub](https://github.com/soroushesnaashari/Bank-Loan-Analyzing) · [Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/bank-loan-logistic-regression-naive-bayes-knn)
 
 <br>
 
