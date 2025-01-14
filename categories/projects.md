@@ -11,7 +11,7 @@ You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [
 
 * ### `Country Data (Dec 2024)`<br>
 This project applies Principal Component Analysis (PCA) to a dataset containing country-level features. The goal is to reduce dimensionality while retaining most of the variance, enabling a more compact representation of the data. PCA is used to:
-Analyze the structure and variance of the dataset. Visualize the data in reduced dimensions. Evaluate reconstruction accuracy after dimensionality reduction.<br>
+Analyze the structure and variance of the dataset, visualize the data in reduced dimensions, evaluate reconstruction accuracy after dimensionality reduction.<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Country-Data)
 
 <br>
