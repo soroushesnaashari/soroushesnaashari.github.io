@@ -9,6 +9,13 @@ You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [
 <hr>
 <br>
 
+* ### `Country Data (Dec 2024)`<br>
+This project applies Principal Component Analysis (PCA) to a dataset containing country-level features. The goal is to reduce dimensionality while retaining most of the variance, enabling a more compact representation of the data. PCA is used to:
+Analyze the structure and variance of the dataset. Visualize the data in reduced dimensions. Evaluate reconstruction accuracy after dimensionality reduction.<br>
+[Repository on GitHub](https://github.com/soroushesnaashari/Country-Data)
+
+<br>
+
 * ### `Market Analyzing (Dec 2024)`<br>
 This project is a comprehensive analysis of a financial market dataset, focusing on preprocessing, visualization and predictive modeling. The objective is to explore various machine learning algorithms to predict stock prices and evaluate their effectiveness.<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Market-Analyzing) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/market-analyzing)
@@ -23,25 +30,25 @@ An Unsupervised Machine Learning Project which was about Clustering the customer
 
 * ### `Phone Price Prediction (June 2024)`<br>
 The Phone Price Prediction project aims to classify mobile phones into different price ranges based on their technical specifications. Using machine learning algorithms, the project evaluates features like battery power, RAM, processor cores and more to predict the price category of a phone. This project demonstrates data preprocessing, feature selection and model optimization techniques to achieve accurate predictions.<br>
-[Repository on GitHub](https://github.com/soroushesnaashari/Phone-Price-Prediction) · [Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/phone-price-prediction-dt-rf-svm)
+[Repository on GitHub](https://github.com/soroushesnaashari/Phone-Price-Prediction) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/phone-price-prediction-dt-rf-svm)
 
 <br>
 
 * ### `Personal Bank Loan (June 2024)`<br>
 In this **ML** project, I focus on predicting personal bank loan approval using **"Logistic Regression"**, **"Naive Bayes"** and **"KNN"** algorithms. The goal is to analyze customer data such as age, income, and education to predict whether a loan application will be approved or not.<br>
-[Repository on GitHub](https://github.com/soroushesnaashari/Bank-Loan-Analyzing) · [Code on Kaggle](https://www.kaggle.com/code/soroushesnaashari/bank-loan-logistic-regression-naive-bayes-knn)
+[Repository on GitHub](https://github.com/soroushesnaashari/Bank-Loan-Analyzing) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/bank-loan-logistic-regression-naive-bayes-knn)
 
 <br>
 
 * ### `Car Price Prediction (May 2024)`<br>
 In this ML project, I used **"linear regression"** to predict car prices based on various features such as year, present price, kilometers driven, fuel type, seller type, and transmission. The model was trained to identify patterns in the dataset and accurately estimate car prices, helping to understand how different factors impact the value of a vehicle.<br>
-[Repository on GitHub](https://github.com/soroushesnaashari/Car-Price-Prediction) · [Code on Kaggle](https://kaggle.com/code/soroushesnaashari/car-price-linear-regression)
+[Repository on GitHub](https://github.com/soroushesnaashari/Car-Price-Prediction) · [Notebook on Kaggle](https://kaggle.com/code/soroushesnaashari/car-price-linear-regression)
 
 <br>
 
 * ### `Universities' World Ranking (Apr 2024)`<br>
 In this project, I analyze universities across the world, utilizing various visualizations to highlight patterns and distributions within the dataset.<br>
-[Repository on GitHub](https://github.com/soroushesnaashari/Universities-World-Ranking) · [Code on Kaggle](https://kaggle.com/code/soroushesnaashari/universities-world-ranking)
+[Repository on GitHub](https://github.com/soroushesnaashari/Universities-World-Ranking) · [Notebook on Kaggle](https://kaggle.com/code/soroushesnaashari/universities-world-ranking)
 
 <br>
 
