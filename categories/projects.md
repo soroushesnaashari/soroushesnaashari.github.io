@@ -9,6 +9,12 @@ You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [
 <hr>
 <br>
 
+* ### `Password Generator (Jan 2025)`<br>
+This project contains the code for the [`Password Generator Web Application`](https://password-generator-2ytt.onrender.com/). You can access its code through the GitHub repository provided below:<br>
+[Repository on GitHub](https://github.com/soroushesnaashari/Password-Generator)
+
+<br>
+
 * ### `Country Data (Dec 2024)`<br>
 This project applies Principal Component Analysis (PCA) to a dataset containing country-level features. The goal is to reduce dimensionality while retaining most of the variance, enabling a more compact representation of the data. PCA is used to:
 Analyze the structure and variance of the dataset, visualize the data in reduced dimensions, evaluate reconstruction accuracy after dimensionality reduction.<br>
