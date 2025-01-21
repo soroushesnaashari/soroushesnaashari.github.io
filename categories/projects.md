@@ -9,6 +9,12 @@ You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [
 <hr>
 <br>
 
+* ### `Weather Application (Jan 2025)`<br>
+This project contains the code for the [`Weather Web Application`](https://soroushesnaashari.github.io/Weather-App/). You can access its code through the GitHub repository provided below:<br>
+[Repository on GitHub](https://github.com/soroushesnaashari/Weather)
+
+<br>
+
 * ### `Password Generator (Jan 2025)`<br>
 This project contains the code for the [`Password Generator Web Application`](https://soroushesnaashari.github.io/Password-Generator-App/). You can access its code through the GitHub repository provided below:<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Password-Generator)
