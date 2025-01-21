@@ -10,13 +10,13 @@ You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [
 <br>
 
 * ### `Weather Application (Jan 2025)`<br>
-This project contains the code for the [`Weather Web Application`](https://soroushesnaashari.github.io/Weather-App/), which you can find the information in detail in the [Web Application's](https://soroushesnaashari.github.io/categories/webapps/) section. You can access its code through the GitHub repository provided below:<br>
+This project contains the code for the [`Weather Web Application`](https://soroushesnaashari.github.io/Weather-App/). For more detailed information, visit the [Apps](https://soroushesnaashari.github.io/categories/apps/) section. You can access its code through the GitHub repository provided below:<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Weather)
 
 <br>
 
 * ### `Password Generator (Jan 2025)`<br>
-This project contains the code for the [`Password Generator Web Application`](https://soroushesnaashari.github.io/Password-Generator-App/), which you can find the information in detail in the [Web Application's](https://soroushesnaashari.github.io/categories/webapps/) section. You can access its code through the GitHub repository provided below:<br>
+This project contains the code for the [`Password Generator Web Application`](https://soroushesnaashari.github.io/Password-Generator-App/). For more detailed information, visit the [Apps](https://soroushesnaashari.github.io/categories/apps/) section. You can access its code through the GitHub repository provided below:<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Password-Generator)
 
 <br>

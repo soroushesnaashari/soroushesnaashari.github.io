@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Web Applications
-permalink: /categories/webapps/
+permalink: /categories/apps/
 ---
 <br>
 
