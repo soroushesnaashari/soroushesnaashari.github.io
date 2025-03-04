@@ -9,14 +9,22 @@ You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [
 <hr>
 <br>
 
-* ### `Weather Application (Jan 2025)`<br>
-This project contains the code for the [`Weather Web Application`](https://soroushesnaashari.github.io/Weather-App/). For more detailed information, visit the [Apps](https://soroushesnaashari.github.io/categories/apps/) section. You can access its code through the GitHub repository provided below:<br>
+* ### `Rice Image Classification (Feb 2025)`<br>
+This project classifies five rice varieties (Arborio, Basmati, Ipsala, Jasmine, Karacadag) using deep learning. By training custom CNNs and fine-tuning ResNet50 on 75,000 images, it achieves 99% accuracy through data augmentation, transfer learning and optimization (Adam, LR scheduling). Built with TensorFlow and PyTorch, the solution includes model deployment and performance visualization for scalable agricultural image analysis.<br>
+**TensorFlow:** [Repository on GitHub](https://github.com/soroushesnaashari/Rice-Images-Classification-with-CNN-using-TensorFlow) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/rice-image-classification-cnn-using-tensorflow)
+**PyTorch:** [Repository on GitHub](https://github.com/soroushesnaashari/Rice-Images-Classification-with-CNN-using-PyTorch) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/rice-classification-cnn-using-pytorch)
+
+<br>
+
+* ### [`Weather Application`](https://soroushesnaashari.github.io/Weather-App/) `(Jan 2025)`<br>
+A simple yet powerful weather application that retrieves and displays real-time weather information for any city worldwide using the OpenWeatherMap API. This project is designed to provide users with essential weather details, including temperature, humidity, wind speed, and current weather conditions, in a clean and user-friendly interface.
+You can clone and run the application locally through [this](https://github.com/soroushesnaashari/Weather) repository or access it directly via the internet using [this](https://soroushesnaashari.github.io/Weather-App/) link. The application is fully responsive and works seamlessly across devices, ensuring a smooth experience for all users.<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Weather)
 
 <br>
 
-* ### `Password Generator (Jan 2025)`<br>
-This project contains the code for the [`Password Generator Web Application`](https://soroushesnaashari.github.io/Password-Generator-App/). For more detailed information, visit the [Apps](https://soroushesnaashari.github.io/categories/apps/) section. You can access its code through the GitHub repository provided below:<br>
+* ### [`Password Generator Application`](https://soroushesnaashari.github.io/Password-Generator-App/) `(Jan 2025)`<br>
+The Password Generator Web App is a simple yet powerful tool designed to create secure and customizable passwords. Users can generate passwords in two modes: Simple and Complex. The Simple mode generates passwords in the format `****-****-****`, while the Complex mode creates longer passwords in the format `****-****-****-****`. Both modes include a mix of uppercase letters, lowercase letters, numbers, and special symbols (!@#$%&), ensuring strong and secure passwords. As it is an open source project you can access it's code through the following repository:<br>
 [Repository on GitHub](https://github.com/soroushesnaashari/Password-Generator)
 
 <br>
