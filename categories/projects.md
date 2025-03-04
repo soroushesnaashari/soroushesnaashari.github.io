@@ -3,15 +3,11 @@ layout: default
 title: Projects
 permalink: /categories/projects/
 ---
-You can access my code on [`GitHub`](https://github.com/soroushesnaashari) and [`Kaggle`](https://www.kaggle.com/soroushesnaashari)
-
-<br>
-<hr>
 <br>
 
 * ### `Rice Image Classification (Feb 2025)`<br>
 This project classifies five rice varieties (Arborio, Basmati, Ipsala, Jasmine, Karacadag) using deep learning. By training custom CNNs and fine-tuning ResNet50 on 75,000 images, it achieves 99% accuracy through data augmentation, transfer learning and optimization (Adam, LR scheduling). Built with TensorFlow and PyTorch, the solution includes model deployment and performance visualization for scalable agricultural image analysis.<br>
-**TensorFlow:** [Repository on GitHub](https://github.com/soroushesnaashari/Rice-Images-Classification-with-CNN-using-TensorFlow) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/rice-image-classification-cnn-using-tensorflow)
+**TensorFlow:** [Repository on GitHub](https://github.com/soroushesnaashari/Rice-Images-Classification-with-CNN-using-TensorFlow) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/rice-image-classification-cnn-using-tensorflow)<br>
 **PyTorch:** [Repository on GitHub](https://github.com/soroushesnaashari/Rice-Images-Classification-with-CNN-using-PyTorch) · [Notebook on Kaggle](https://www.kaggle.com/code/soroushesnaashari/rice-classification-cnn-using-pytorch)
 
 <br>
