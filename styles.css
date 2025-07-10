@@ -1,0 +1,136 @@
+/* styles.css */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    max-width: 510px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+h1 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+h2 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+nav {
+    display: flex;
+}
+
+nav a {
+    margin-left: 1rem;
+    color: #777;
+    text-decoration: none;
+    font-size: 0.75rem;
+}
+
+nav a:hover,
+nav a.active {
+    color: #000;
+}
+
+main p {
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.5;
+    text-align: justify;
+}
+
+main p a {
+    color: #444;
+    text-decoration: underline;
+}
+
+main p a:hover {
+    color: #000;
+}
+
+li {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    font-weight: 550;
+    color: #444;
+    line-height: 1.5;
+}
+
+li a {
+    color: #444;
+    text-decoration: underline;
+}
+
+li a:hover {
+    color: #000;
+}
+
+.social-links {
+    margin-top: 3rem;
+}
+
+.social-links a {
+    color: #777;
+    text-decoration: none;
+    margin-bottom: 0.05rem;
+    font-size: 0.70rem;
+    display: inline-block;
+}
+
+.social-links a:hover {
+    color: #000;
+}
+
+/* Blog styles */
+.blog-meta {
+    font-size: 0.75rem;
+    color: #777;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+}
+
+.blog-category {
+    color: #777;
+}
+
+article h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 2rem 0 1rem 0;
+    color: #333;
+}
+
+article pre {
+    background: #f5f5f5;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1rem 0;
+    border-radius: 4px;
+}
+
+article code {
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+ol li {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #444;
+    line-height: 1.5;
+    text-align: justify;
+}
