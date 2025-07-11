@@ -1,2 +1,1 @@
-# soroushesnaashari.github.io
-Discover more by exploring my website through the link below!
+Use [this link](https://soroushesnaashari.github.io) to access my personal website.
