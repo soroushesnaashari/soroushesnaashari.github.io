@@ -27,8 +27,27 @@
         </p>
 
         <ul>
+            
             <br>
             <br>
+
+            <li>Object Detection (Fine-Tuning) (Jul 2025)</li>
+            <p>I adapted the ultra-light <span style="font-weight: 600;">YOLOv11-nano</span> detector to my own 
+                multi-class traffic dataset. First, I organized images and annotations into training, validation, 
+                and test sets, then ran quick visual checks to ensure data quality. Leveraging PyTorch and the Ultralytics API, 
+                I continued training from the pretrained weights for 100 epochs at 640×640 resolution, closely monitoring loss, 
+                precision, recall, and mAP@0.5 from the training logs. After the quantitative metrics looked strong, 
+                I generated sample images with overlaid bounding boxes to qualitatively validate detection performance.
+                Finally, I ran real-time detection on the dataset's test video.<br>
+                <br>
+                <a href="https://github.com/soroushesnaashari/Object-Detection-using-YOLOv11" target="_blank">Repository on GitHub</a>
+                · <a href="https://www.kaggle.com/code/soroushesnaashari/object-detection-using-yolov11" target="_blank">Notebook on
+                    Kaggle</a>
+            </p>
+
+            <br>
+            <br>
+            
             <li>Anime Faces Generator (May 2025)</li>
             <p>This project implement <span style="font-weight: 600;">Generative Adversarial Networks
                     (GAN)</span> to generate anime faces, one using TensorFlow and the other
