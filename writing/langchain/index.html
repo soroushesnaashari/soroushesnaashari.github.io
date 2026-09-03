@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LangChain — A Crash Course</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <style>
+    p.sources{font-size:0.88em;opacity:0.8;margin-top:1.2em;border-top:1px dashed rgba(128,128,128,0.3);padding-top:0.6em}
+    p.verification-note{font-size:0.92em;opacity:0.88;border-left:3px solid currentColor;padding-left:0.8em;margin:1em 0}
+    .callout{display:inline-block;font-size:0.75em;font-weight:600;letter-spacing:0.02em;text-transform:uppercase;padding:0.15em 0.55em;border-radius:0.3em;margin-right:0.4em;border:1px solid currentColor;opacity:0.9}
+    .callout.verify{color:#6d28d9}
+  </style>
+</head>
+<body>
+
+  <nav id="toc" aria-label="Table of contents">
+    <ul>
+      <li><a href="#lesson-01"><span class="toc-title">Orientation &amp; Setup</span><span class="toc-num">01</span></a></li>
+      <li><a href="#lesson-02"><span class="toc-title">Chat Models</span><span class="toc-num">02</span></a></li>
+      <li><a href="#lesson-03"><span class="toc-title">Prompt Templates</span><span class="toc-num">03</span></a></li>
+      <li><a href="#lesson-04"><span class="toc-title">LCEL — Composing Chains</span><span class="toc-num">04</span></a></li>
+      <li><a href="#lesson-05"><span class="toc-title">Structured Output</span><span class="toc-num">05</span></a></li>
+      <li><a href="#lesson-06"><span class="toc-title">Memory &amp; Conversation State</span><span class="toc-num">06</span></a></li>
+      <li><a href="#lesson-07"><span class="toc-title">Document Loaders &amp; Splitters</span><span class="toc-num">07</span></a></li>
+      <li><a href="#lesson-08"><span class="toc-title">Embeddings &amp; Vector Stores</span><span class="toc-num">08</span></a></li>
+      <li><a href="#lesson-09"><span class="toc-title">Retrievers &amp; RAG</span><span class="toc-num">09</span></a></li>
+      <li><a href="#lesson-10"><span class="toc-title">Tools &amp; Tool Calling</span><span class="toc-num">10</span></a></li>
+      <li><a href="#lesson-11"><span class="toc-title">Agents</span><span class="toc-num">11</span></a></li>
+      <li><a href="#lesson-12"><span class="toc-title">Streaming &amp; Execution Events</span><span class="toc-num">12</span></a></li>
+      <li><a href="#lesson-13"><span class="toc-title">Observability with LangSmith</span><span class="toc-num">13</span></a></li>
+      <li><a href="#lesson-14"><span class="toc-title">Testing &amp; Evaluation</span><span class="toc-num">14</span></a></li>
+      <li><a href="#lesson-15"><span class="toc-title">Production Readiness</span><span class="toc-num">15</span></a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header>
+      <h1><a href="/writing/langchain/" style="text-decoration: none; color: inherit">LangChain</a></h1>
+      <nav class="site-links">
+        <a href="/writing/gradient-descent/">Gradient Descent</a>
+        <a href="/writing/langchain/">LangChain</a>
+      </nav>
+    </header>
+
+    <section class="intro">
+      <p>This page is a self-contained learning path for LangChain 1.x in Python — written for people who already understand basic LLM concepts and want to learn the framework used to build real LLM applications and agents. It covers models, prompts, LCEL, structured output, state and memory, retrieval and RAG, tools, agents, streaming, observability, evaluation, and production concerns.</p>
+      <p>Read top to bottom — each lesson builds on the last. Code examples target the current LangChain 1.x concepts and APIs, but exact provider/model names and integration packages can change. Treat the linked official documentation as the final authority for version-specific details.</p>
+      <p class="verification-note"><span class="callout verify">Verification</span> Reviewed against <code>docs.langchain.com</code> and <code>reference.langchain.com</code> available September 2026. LangChain evolves quickly: recheck versions, import paths, and provider capabilities against the docs and <code>pip show</code> before production use.</p>
+      <figure class="arch-diagram" role="img" aria-label="Diagram of how LangChain's core components fit together: an LCEL pipeline (Prompt -> Model -> Structured Output) acts as the base unit. Memory, retrieval, and tools feed an autonomous agent loop that wraps model and execution, all observed by LangSmith.">
+        <svg viewBox="0 0 860 330" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:inherit;">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+
+          <!-- LCEL pipeline: Prompt -> Model -> Structured Output -->
+          <g stroke="currentColor" fill="none" stroke-width="1.5">
+            <rect x="20"  y="30" width="150" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+            <rect x="230" y="30" width="150" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+            <rect x="440" y="30" width="180" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+            <line x1="170" y1="58" x2="228" y2="58" marker-end="url(#arrow)"/>
+            <line x1="380" y1="58" x2="438" y2="58" marker-end="url(#arrow)"/>
+          </g>
+          <g fill="currentColor" font-size="13" text-anchor="middle">
+            <text x="95"  y="53">Prompt Template</text>
+            <text x="95"  y="70" font-size="10" opacity="0.7">Lesson 03</text>
+            <text x="305" y="53">Chat Model</text>
+            <text x="305" y="70" font-size="10" opacity="0.7">Lesson 02</text>
+            <text x="530" y="53">Structured Output</text>
+            <text x="530" y="70" font-size="10" opacity="0.7">Lesson 05</text>
+          </g>
+          <text x="305" y="18" fill="currentColor" font-size="11" text-anchor="middle" opacity="0.7">prompt | model | parser  (LCEL Pipeline, Lesson 04)</text>
+
+          <!-- Feeders: Memory, Retrieval, Tools -->
+          <g stroke="currentColor" fill="none" stroke-width="1.5">
+            <rect x="20"  y="150" width="140" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+            <rect x="185" y="150" width="140" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+            <rect x="350" y="150" width="140" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+          </g>
+          <g fill="currentColor" font-size="13" text-anchor="middle">
+            <text x="90"  y="173">Memory &amp; State</text>
+            <text x="90"  y="190" font-size="10" opacity="0.7">Lesson 06</text>
+            <text x="255" y="173">Retrieval / RAG</text>
+            <text x="255" y="190" font-size="10" opacity="0.7">Lessons 07&#8211;09</text>
+            <text x="420" y="173">Tools</text>
+            <text x="420" y="190" font-size="10" opacity="0.7">Lesson 10</text>
+          </g>
+
+          <!-- Agent box wrapping model + tools + memory + middleware -->
+          <g stroke="currentColor" fill="none" stroke-width="1.5" stroke-dasharray="5,3">
+            <rect x="550" y="150" width="270" height="56" rx="6" fill="currentColor" fill-opacity="0.06"/>
+          </g>
+          <g fill="currentColor" font-size="13" text-anchor="middle">
+            <text x="685" y="173">Agent (create_agent)</text>
+            <text x="685" y="190" font-size="10" opacity="0.7">Lesson 11 &#8211; State + Tools + Middleware</text>
+          </g>
+          <g stroke="currentColor" fill="none" stroke-width="1.5">
+            <line x1="90"  y1="150" x2="600" y2="106" marker-end="url(#arrow)"/>
+            <line x1="255" y1="150" x2="640" y2="106" marker-end="url(#arrow)"/>
+            <line x1="420" y1="150" x2="680" y2="106" marker-end="url(#arrow)"/>
+          </g>
+
+          <!-- LangSmith observability bar -->
+          <g stroke="currentColor" fill="none" stroke-width="1.5">
+            <rect x="20" y="255" width="800" height="46" rx="6" fill="currentColor" fill-opacity="0.03" stroke-dasharray="3,3"/>
+          </g>
+          <text x="420" y="283" fill="currentColor" font-size="13" text-anchor="middle">LangSmith &#8212; tracing, evaluation, monitoring (Lessons 13&#8211;14)</text>
+          <g stroke="currentColor" stroke-width="1" stroke-dasharray="2,3" opacity="0.6">
+            <line x1="305" y1="86"  x2="305" y2="253"/>
+            <line x1="685" y1="206" x2="685" y2="253"/>
+          </g>
+        </svg>
+        <figcaption style="font-size:0.85em;opacity:0.75;margin-top:6px;">Core Mental Model: LCEL pipelines (prompt &#8594; model &#8594; parser) serve as deterministic execution units. Memory, retrieval, and tools feed an autonomous agent decision loop, and LangSmith observes and evaluates every layer.</figcaption>
+      </figure>
+    </section>
+
+<section class="lesson" id="lesson-01">
+<h2>01 — Orientation &amp; Setup</h2>
+<p class="goal">Know what LangChain is, its package boundaries, when to use it, and how to spot legacy tutorials.</p>
+<p>LangChain is an open-source framework of standard interfaces and building blocks around model calls: messages, prompts, tools, structured output, retrieval, agents, execution, streaming, persistence, middleware, tracing, and evaluation. Its value is composition without locking the app to one provider.</p>
+<p><strong>You do not need LangChain just to call an LLM.</strong> A few direct SDK calls are clearer for single-turn scripts. Use LangChain when the app becomes a multi-component pipeline/agent, or when you want standardized streaming, tool calling, persistence, middleware, tracing, and evaluation.</p>
+<h3>LangChain vs. LangGraph vs. LangSmith</h3>
+<table><thead><tr><th>Tool</th><th>Primary job</th><th>Reach for it when</th></tr></thead><tbody>
+<tr><td><code>langchain</code></td><td>High-level blocks + standard agent API</td><td>Models, prompts, tools, structured output, retrieval, standard agents</td></tr>
+<tr><td><code>langgraph</code></td><td>Low-level stateful orchestration</td><td>Custom branches, explicit state, long runs, interrupts, subgraphs, multi-agent topologies</td></tr>
+<tr><td><code>langsmith</code></td><td>Observability + evaluation</td><td>Tracing, debugging, datasets, experiments, production monitoring</td></tr>
+</tbody></table>
+<p>Complementary, not exclusive. <code>create_agent</code> is built on LangGraph, so you get persistence/streaming without writing graph code until control flow demands it.</p>
+<h3>Package layout (1.x)</h3>
+<table><thead><tr><th>Package</th><th>Role</th></tr></thead><tbody>
+<tr><td><code>langchain</code></td><td>Main entrypoint: <code>create_agent</code>, <code>init_chat_model</code>/<code>init_embeddings</code>, re-exports for <code>messages</code>, <code>tools</code>, middleware.</td></tr>
+<tr><td><code>langchain-core</code></td><td>Foundation: <code>Runnable</code>, message types, prompts, documents, vector-store/retriever interfaces, parsers, callbacks.</td></tr>
+<tr><td><code>langchain-openai</code>, <code>langchain-anthropic</code>, …</td><td>One integration package per provider/family. Install only what you use.</td></tr>
+<tr><td><code>langchain-text-splitters</code></td><td>Chunking utilities for ingestion.</td></tr>
+<tr><td><code>langchain-classic</code></td><td>Compatibility home for pre-1.0 chains, old retrievers, indexing API, Hub, community re-exports. For maintaining old code, not new apps.</td></tr>
+</tbody></table>
+<p><strong>Important:</strong> do not memorize "loader X lives in package Y." The integration surface changes faster than the core API. Check the current integration docs for the exact package.</p>
+<h3>Install</h3>
+<pre><code class="language-bash"># Python 3.10+
+python -m venv .venv
+source .venv/bin/activate
+pip install -U langchain
+pip install -U langchain-openai langchain-anthropic  # as needed
+export OPENAI_API_KEY="sk-..."</code></pre>
+<h3>Old-tutorial radar</h3>
+<ul>
+<li><code>langgraph.prebuilt.create_react_agent</code> → <code>langchain.agents.create_agent</code>.</li>
+<li>Legacy chains / old memory classes / former <code>langchain.retrievers</code> namespace → compatibility surfaces under <code>langchain-classic</code>.</li>
+<li>Agent <code>prompt=...</code> (old API) → <code>system_prompt=...</code> in <code>create_agent</code>.</li>
+<li>Old chain/memory tutorials may still teach concepts, but do not copy them as 1.x reference code. Identify the generation first; import path first, version second.</li>
+</ul>
+<h3>Gotchas</h3>
+<ul><li><strong>API churn:</strong> verify imports/versions against current docs before production copy-paste.</li>
+<li><strong>Framework ≠ requirement:</strong> extra abstraction without multi-step needs is cost, not value.</li></ul>
+<p><strong>Try it yourself:</strong> print <code>langchain.__version__</code>, make one direct SDK call and one <code>init_chat_model</code> call, and state what the framework added.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/releases/langchain-v1">v1 release notes</a>, <a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">v1 migration guide</a>, <a href="https://docs.langchain.com/oss/python/langchain/overview">Overview</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-02">
+<h2>02 — Chat Models</h2>
+<p class="goal">Instantiate any provider behind one interface; drive it with invoke / stream / batch.</p>
+<p>A chat model wraps a provider API behind one contract: same constructor style, same <code>.invoke()/.stream()/.batch()</code> (+ async twins), same message types out. Provider becomes configuration, not architecture.</p>
+<h3>Two ways to get a model</h3>
+<pre><code class="language-python">from langchain.chat_models import init_chat_model
+from langchain_openai import ChatOpenAI
+from langchain_anthropic import ChatAnthropic
+
+model = init_chat_model("openai:gpt-5.5")               # needs langchain-openai
+model = init_chat_model("anthropic:claude-sonnet-4-6") # needs langchain-anthropic
+
+model = ChatOpenAI(model="gpt-5.5")
+model = ChatAnthropic(model="claude-sonnet-4-6")</code></pre>
+<p>Use the factory when provider is config-driven; use the class for provider-specific options. Common params: <code>model</code>, <code>temperature</code>, <code>max_tokens</code>, <code>timeout</code> (s), <code>max_retries</code>.</p>
+<h3>Messages in, AIMessage out</h3>
+<pre><code class="language-python">from langchain.chat_models import init_chat_model
+from langchain.messages import SystemMessage, HumanMessage
+
+model = init_chat_model("openai:gpt-5.5")
+response = model.invoke([
+    SystemMessage("You are a helpful assistant."),
+    HumanMessage("Translate to French: I love programming."),
+])
+print(type(response))  # AIMessage
+print(response.text)   # "J'adore la programmation."</code></pre>
+<p>Roles: <code>SystemMessage</code> (steering), <code>HumanMessage</code> (user), <code>AIMessage</code> (model turns + tool-call requests), <code>ToolMessage</code> (tool results, Lesson 10). Useful <code>AIMessage</code> attrs: <code>.text</code>, <code>.tool_calls</code>, <code>.usage_metadata</code>, <code>.content_blocks</code> (provider-agnostic multimodal/reasoning view).</p>
+<h3>Standard interface</h3>
+<pre><code class="language-python">response = model.invoke("Why is the sky blue?")
+for chunk in model.stream("Tell me a short story."):  # yields AIMessageChunk
+    print(chunk.text, end="", flush=True)
+responses = model.batch(["Q1?", "Q2?"], config={"max_concurrency": 5})
+# async: ainvoke, astream, abatch. Reuse one thread-safe instance.</code></pre>
+<h3>Gotchas</h3>
+<ul>
+<li><code>.content</code> may be str <em>or</em> list of content blocks (images/reasoning). Use <code>.text</code> for plain string.</li>
+<li>Newest reasoning models may reject non-default <code>temperature</code> with 400 — a retired knob, not a tunable one.</li>
+<li><code>invoke</code> returns <code>AIMessage</code>, not str — extract via <code>.text</code> or <code>StrOutputParser</code>.</li>
+<li>Prefer explicit <code>"provider:model"</code> over bare names; pin IDs over moving aliases.</li>
+</ul>
+<p><strong>Try it yourself:</strong> inspect <code>model.invoke("Hello!").usage_metadata</code>.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/models">Models</a>, <a href="https://reference.langchain.com/python/langchain-core/messages">Messages reference</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-03">
+<h2>03 — Prompt Templates</h2>
+<p class="goal">Build parameterized, reproducible prompts — including few-shot — instead of f-strings.</p>
+<p>Hand-concatenated prompts invite injection bugs and spaghetti. <code>ChatPromptTemplate</code> declares structure + variables up front; invoking fills holes into a message list. Missing variables fail before tokens are spent.</p>
+<pre><code class="language-python">from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder, FewShotChatMessagePromptTemplate
+from langchain.messages import HumanMessage, AIMessage
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You answer in {style} style."),
+    ("human", "{question}"),
+])
+prompt.invoke({"style": "pirate", "question": "What is a transformer?"}).to_messages()
+
+# History splicing
+hist_prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are concise."),
+    MessagesPlaceholder("history"),
+    ("human", "{question}"),
+])
+hist_prompt.invoke({"question": "And in Rust?", "history": [HumanMessage("How to read a file in Python?"), AIMessage("open('f').read()")]})</code></pre>
+<pre><code class="language-python">import datetime
+p = ChatPromptTemplate.from_messages([("human", "Today is {date}: {q}")])
+p = p.partial(date=datetime.date(2026, 9, 1).isoformat())
+p.invoke({"q": "what day is it?"})
+
+examples = [{"input": "2+2", "output": "4"}, {"input": "2+3", "output": "5"}]
+ex = ChatPromptTemplate.from_messages([("human", "{input}"), ("ai", "{output}")])
+few = FewShotChatMessagePromptTemplate(examples=examples, example_prompt=ex)
+full = ChatPromptTemplate.from_messages([("system", "Answer with just the number."), few, ("human", "{input}")])
+full.invoke({"input": "2+9"}).to_messages()</code></pre>
+<h3>Gotchas</h3>
+<ul><li>Literal braces (JSON) break f-string templates — double them or use <code>template_format="mustache"</code>.</li>
+<li>Untrusted values belong <em>inside</em> messages, never concatenated into the system prompt.</li>
+<li>For simple agents a plain <code>system_prompt="..."</code> string is fine; templates pay off with multiple variables / chain composition.</li></ul>
+<p><strong>Try it yourself:</strong> build a template with a history placeholder over a 3-turn conversation.</p>
+</section>
+
+<section class="lesson" id="lesson-04">
+<h2>04 — LCEL — Composing Chains</h2>
+<p class="goal">Pipe prompts/models/code into one Runnable that streams, batches, and traces.</p>
+<p>A <code>Runnable</code> has <code>invoke/stream/batch</code> (+ async). <code>prompt | model | parser</code> builds a <code>RunnableSequence</code>: output feeds next input. Value is composite behavior — end-to-end streaming, batching, retries, tracing — not brevity.</p>
+<pre><code class="language-python">from langchain.chat_models import init_chat_model
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableLambda, RunnableParallel, RunnablePassthrough, chain
+
+model = init_chat_model("openai:gpt-5.5")
+prompt = ChatPromptTemplate.from_messages([("system", "Translate to {language}."), ("human", "{text}")])
+chain_ = prompt | model | StrOutputParser()
+chain_.invoke({"language": "Spanish", "text": "the weather is nice"})
+for t in chain_.stream({"language": "Spanish", "text": "the weather is nice"}):
+    print(t, end="", flush=True)
+
+# Primitives: fan-out + carry-through
+enriched = RunnablePassthrough().assign(topic_len=lambda d: len(d["topic"]))
+enriched.invoke({"topic": "rag"})  # {'topic':'rag','topic_len':3}
+retrieval_step = RunnableParallel(context=lambda d: fetch_docs(d["question"]), question=RunnablePassthrough())
+
+# Resilience + traceable function
+robust = prompt | model.with_retry(stop_after_attempt=3).with_fallbacks([backup_model]) | StrOutputParser()
+@chain
+def extract_topic(text: str) -> dict:
+    return {"topic": text.split()[-1]}</code></pre>
+<h3>Gotchas</h3>
+<ul><li>Enforce inter-step shape contracts; convert <code>AIMessage</code>→str explicitly.</li><li>Any buffering <code>RunnableLambda</code> breaks end-to-end streaming by construction.</li><li>Raw dicts coerce to <code>RunnableParallel</code> — keep the schema deliberate.</li><li>Debug with <code>chain.get_graph().print_ascii()</code> / LangSmith, not prints.</li><li>Plain Python is fine for plain logic; LCEL when you need streaming/batching/tracing/fallbacks.</li></ul>
+<p><strong>Try it yourself:</strong> add <code>.with_retry()</code> and confirm the chain still streams.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/lcel">LCEL guide</a>, <a href="https://reference.langchain.com/python/langchain-core/runnables/base/Runnable">Runnable reference</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-05">
+<h2>05 — Structured Output</h2>
+<p class="goal">Get validated objects, not prose; know provider-native vs tool-calling strategies and failure handling.</p>
+<p>Apps want records. <code>.with_structured_output(schema)</code> returns a model-like runnable emitting typed objects. Capabilities/guarantees are provider-dependent — LangChain adapts a common interface to them. Schema validity ≠ factual truth.</p>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+from langchain.chat_models import init_chat_model
+
+class Movie(BaseModel):
+    title: str = Field(description="Movie title")
+    year: int = Field(description="Release year")
+    director: str = Field(description="Director's name")
+
+model = init_chat_model("openai:gpt-5.5")
+obj = model.with_structured_output(Movie).invoke("Inception was directed by Christopher Nolan, released 2010.")
+print(obj.title, obj.model_dump())
+debug = model.with_structured_output(Movie, include_raw=True).invoke("...")
+# {"raw": AIMessage, "parsed": Movie, "parsing_error": None} — keep raw for prod debugging</code></pre>
+<p>Methods: <code>method="json_schema"</code> (provider-native enforcement where supported), <code>"function_calling"</code> (schema as tool, works on tool-capable models), <code>"json_mode"</code> (valid JSON only — you describe schema in prompt, weakest). Prefer Pydantic (validation + typed access); <code>TypedDict</code>/JSON Schema give plain dicts.</p>
+<pre><code class="language-python">from langchain.agents import create_agent
+from langchain.agents.structured_output import ProviderStrategy, ToolStrategy
+
+class TripPlan(BaseModel):
+    destination: str
+    summary: str
+
+agent = create_agent(model="openai:gpt-5.5", tools=[], response_format=TripPlan)  # auto strategy
+agent_native = create_agent(model="openai:gpt-5.5", tools=[], response_format=ProviderStrategy(TripPlan))
+agent_tool = create_agent(model="anthropic:claude-sonnet-4-6", tools=[], response_format=ToolStrategy(TripPlan, handle_errors=True))
+result = agent.invoke({"messages": [{"role": "user", "content": "Plan a weekend in Tokyo."}]})
+print(result["structured_response"])</code></pre>
+<h3>Gotchas</h3>
+<ul><li><strong>Field descriptions are prompts</strong> — undescribed fields get guesses.</li><li>Keep schemas small/flat where enforcement is weak; log/surface errors, define retry-or-fallback policy.</li><li><code>StrOutputParser()</code> remains the normal LCEL text tail; specialized parsers are the fallback when native structured output is unavailable. Parsers aren't obsolete — native first when supported.</li></ul>
+<p><strong>Try it yourself:</strong> extract <code>ArticleSummary(title, summary, topics: list[str])</code> from 3 articles incl. one adversarial input; compare raw vs parsed.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/structured-output">Structured output</a>, <a href="https://reference.langchain.com/python/langchain/agents/structured_output">Strategies reference</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-06">
+<h2>06 — Memory &amp; Conversation State</h2>
+<p class="goal">Distinguish history / agent state / checkpointer / runtime context / long-term store — and use each correctly.</p>
+<table><thead><tr><th>Concept</th><th>What it is</th><th>Lifetime</th></tr></thead><tbody>
+<tr><td>Messages / history</td><td>Messages sent as context</td><td>Current conversation</td></tr>
+<tr><td>Agent state</td><td>Graph state incl. messages + custom fields</td><td>Current thread/run</td></tr>
+<tr><td>Checkpointer</td><td>Persists state by <code>thread_id</code></td><td>Across invocations/restarts (if durable backend)</td></tr>
+<tr><td>Runtime context</td><td>Immutable per-run info (user ID, perms, flags)</td><td>One run</td></tr>
+<tr><td>Long-term store</td><td>Cross-thread app data (prefs, facts)</td><td>Across sessions</td></tr>
+</tbody></table>
+<pre><code class="language-python">from langchain.chat_models import init_chat_model
+from langchain.messages import SystemMessage, HumanMessage
+model = init_chat_model("openai:gpt-5.5")
+history = [SystemMessage("You are helpful.")]
+history += [HumanMessage("Hi, I'm Sam."), model.invoke(history + [HumanMessage("Hi, I'm Sam.")])]
+print(model.invoke(history + [HumanMessage("What's my name?")]).text)
+
+from langchain.agents import create_agent, AgentState
+from langgraph.checkpoint.memory import InMemorySaver
+agent = create_agent(model="openai:gpt-5.5", tools=[], checkpointer=InMemorySaver())
+cfg = {"configurable": {"thread_id": "conversation-1"}}
+agent.invoke({"messages": [{"role": "user", "content": "My name is Sam."}]}, config=cfg)
+print(agent.invoke({"messages": [{"role": "user", "content": "What's my name?"}]}, config=cfg)["messages"][-1].text)
+
+class CustomState(AgentState):
+    user_id: str
+    preferences: dict
+agent2 = create_agent(model="openai:gpt-5.5", tools=[], state_schema=CustomState, checkpointer=InMemorySaver())
+
+from dataclasses import dataclass
+@dataclass
+class Context: user_id: str; plan: str
+agent3 = create_agent(model="openai:gpt-5.5", tools=[], context_schema=Context)
+agent3.invoke({"messages": [{"role": "user", "content": "Help me."}]}, context=Context(user_id="u-123", plan="pro"))</code></pre>
+<p><code>InMemorySaver</code> is process-local (tests/learning). Production: durable checkpointer (e.g. Postgres) + same <code>thread_id</code> model; long-term facts go in a separate store, not the checkpointer. Manage growth via <code>trim_messages</code> / delete / summarization middleware — long context raises cost/latency and can bury signal.</p>
+<h3>Gotchas</h3>
+<ul><li><strong>Silent stateless bug:</strong> <code>thread_id</code> without <code>checkpointer=...</code> = stateless, no error.</li><li><strong>Thread isolation:</strong> never share one user's <code>thread_id</code> with another.</li><li>Checkpointer is persistence, not the definition of memory; state is not a queryable DB; long-term memory needs write/read/delete policy.</li></ul>
+<p><strong>Try it yourself:</strong> two threads + custom <code>user_id</code> + runtime <code>plan</code>; state which persists vs per-run.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Short-term memory</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">Agents</a>, <a href="https://reference.langchain.com/python/langchain/agents/factory/create_agent">create_agent</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-07">
+<h2>07 — Document Loaders &amp; Text Splitters</h2>
+<p class="goal">Turn source data into well-formed Documents and retrieval-friendly chunks.</p>
+<p>RAG quality starts before embeddings. Pipeline: <code>source → parsing/extraction → normalization → Document+metadata → chunking → embedding → index</code>. A <code>Document</code> is just <code>page_content + metadata</code>; loaders are conveniences, not requirements.</p>
+<pre><code class="language-python">from langchain_core.documents import Document
+from pypdf import PdfReader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+reader = PdfReader("report.pdf")
+docs = [Document(page_content=(pg.extract_text() or ""), metadata={"source": "report.pdf", "page": i+1, "document_id": "report-2026-q3"}) for i, pg in enumerate(reader.pages)]
+chunks = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200, add_start_index=True).split_documents(docs)</code></pre>
+<p><code>RecursiveCharacterTextSplitter</code> is a baseline (paragraph → sentence → word), not a universal optimum. <code>1000/200</code> and "10–20% overlap" are starting points — heading/code/table-aware splitting often wins on technical docs. Preserve provenance (source, page, section, doc ID, tenant, timestamp) at ingest or citations/filters become impossible.</p>
+<h3>Gotchas</h3>
+<ul><li>Chars ≠ tokens (EN ~4 chars/token — approximation, pass a tokenizer to <code>length_function</code> under token budgets).</li><li>Don't flatten structure blindly; measure chunking by retrieval results, not blog defaults.</li></ul>
+<p><strong>Try it yourself:</strong> compare 3 chunkings on one PDF/MD; judge which chunks stand alone.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/retrieval">Retrieval</a>, <a href="https://docs.langchain.com/oss/python/releases/langchain-v1">v1 notes</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-08">
+<h2>08 — Embeddings &amp; Vector Stores</h2>
+<p class="goal">Build a small semantic index correctly; avoid the mistakes that make vector search unreliable.</p>
+<pre><code>Documents → Embedding model → Vectors+metadata → Index → Query embedding → Nearest-neighbor → Documents</code></pre>
+<pre><code class="language-python">from langchain_openai import OpenAIEmbeddings
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_core.documents import Document
+
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large")  # dims are model-configurable; don't hard-code
+store = InMemoryVectorStore(embeddings)
+store.add_documents([Document(page_content="LangChain builds LLM apps."), Document(page_content="Gradient descent minimizes loss."), Document(page_content="Eiffel Tower is in Paris.")])
+print(store.similarity_search("How to build around an LLM?", k=2)[0].page_content)
+
+# Persistent alternative (same high-level interface, different ops):
+# pip install -U langchain-chroma
+from langchain_chroma import Chroma
+persistent = Chroma(collection_name="docs", embedding_function=embeddings, persist_directory="./chroma_db")
+persistent.add_documents(store.similarity_search("LLM", k=2))</code></pre>
+<h3>Gotchas</h3>
+<ul><li><strong>Scores need interpretation:</strong> <code>score</code> may be similarity, distance, or normalized value — never copy thresholds across backends.</li><li><strong>One embedding space per index:</strong> changing models normally requires re-embedding; cache embeddings, batch via <code>embed_documents</code>.</li><li><strong>Similarity ≠ authorization:</strong> enforce tenant/user filters; vector search doesn't do access control.</li><li>Semantic ≠ keyword: IDs/rare names may need lexical/hybrid too.</li></ul>
+<p><strong>Try it yourself:</strong> 5-doc corpus + <code>similarity_search_with_score</code> + metadata-filtered retrieval; explain a similar-but-invalid hit.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/models">Models/embeddings</a>, <a href="https://docs.langchain.com/oss/python/langchain/retrieval">Retrieval</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-09">
+<h2>09 — Retrievers &amp; RAG</h2>
+<p class="goal">Build baseline RAG, separate retrieval vs generation failures, know when to go agentic.</p>
+<p>RAG = retrieve evidence → place in context → generate grounded answer. A vector DB is one retrieval mechanism; production may add keyword, filters, reranking, rewriting, hierarchy. A retriever is the interface <strong>query → <code>list[Document]</code></strong>.</p>
+<pre><code class="language-python">from langchain.chat_models import init_chat_model
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from langchain_core.vectorstores import InMemoryVectorStore
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
+
+chunks = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200).split_documents([Document(page_content=long_text, metadata={"source": "notes.txt"})])
+store = InMemoryVectorStore(OpenAIEmbeddings()); store.add_documents(chunks)
+retriever = store.as_retriever(search_type="similarity", search_kwargs={"k": 3})
+def format_docs(docs): return "\n\n".join(d.page_content for d in docs)
+model = init_chat_model("openai:gpt-5.5")
+prompt = ChatPromptTemplate.from_messages([("system", "Answer using the provided context. If it lacks the answer, say you do not know.\n\nContext:\n{context}"), ("human", "{question}")])
+rag_chain = (RunnableParallel(context=lambda d: format_docs(retriever.invoke(d["question"])), question=RunnablePassthrough()) | prompt | model | StrOutputParser())
+print(rag_chain.invoke({"question": "What does the text say about X?"}))</code></pre>
+<h3>What can go wrong?</h3>
+<table><thead><tr><th>Failure</th><th>Cause</th><th>Inspect</th></tr></thead><tbody>
+<tr><td>Evidence never appears</td><td>Parsing/chunking/embeddings/query/filters</td><td>Retrieved docs + metrics</td></tr>
+<tr><td>Right topic, wrong passage</td><td>k too small, noisy index</td><td>Ranking/recall</td></tr>
+<tr><td>Right context, wrong answer</td><td>Prompt/reasoning</td><td>Groundedness/correctness</td></tr>
+<tr><td>Conflicting sources</td><td>Multiple versions in corpus</td><td>Metadata/dates/authority</td></tr>
+<tr><td>Unauthorized info</td><td>Missing tenant filter</td><td>Auth boundary</td></tr>
+</tbody></table>
+<p><strong>Fixed vs agentic retrieval:</strong> fixed = every question retrieves once (predictable, cheap — start here). Agentic = search wrapped as tool; model decides if/when/how often (flexible, costlier). Beyond baseline: better chunking, filters, hybrid lexical+semantic, rewriting, reranking — then re-evaluate.</p>
+<h3>Gotchas</h3>
+<ul><li>Higher k adds noise + burns budget; "answer only from context" without a miss-policy breeds hallucination.</li><li>Retrieved content is <strong>untrusted data</strong> — it can carry injection/malicious instructions. Never let it authorize actions.</li><li>Keep provenance (source/page/IDs) or no citations; stale index = stale answers.</li></ul>
+<p><strong>Try it yourself:</strong> 20-doc corpus × 5 questions (lookup, paraphrase, multi-doc, unsupported, conflicting); inspect chunks before answers.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/deepagents/rag">RAG guide</a>, <a href="https://docs.langchain.com/oss/python/deepagents/retrieval">Retrieval</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">Agents</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-10">
+<h2>10 — Tools &amp; Tool Calling</h2>
+<p class="goal">Expose functions to a model; run the bind → request → execute → reply loop by hand once.</p>
+<p>The model never runs code — it emits a structured call; your code executes and returns a <code>ToolMessage</code>. Same provider feature that powers structured output.</p>
+<pre><code class="language-python">from langchain.tools import tool
+from pydantic import BaseModel, Field
+@tool
+def get_weather(location: str) -&gt; str:
+    """Get current weather for a location."""
+    return f"It's always sunny in {location}!"
+
+class WeatherInput(BaseModel):
+    location: str = Field(description="City, e.g. 'San Francisco'")
+    units: str = Field(default="celsius", description="Units")
+@tool("fetch_weather", args_schema=WeatherInput)
+def fetch_weather(location: str, units: str = "celsius") -&gt; str: ...
+
+from langchain.chat_models import init_chat_model
+from langchain.messages import HumanMessage, ToolMessage
+mwt = init_chat_model("openai:gpt-5.5").bind_tools([get_weather])
+reply = mwt.invoke("What's the weather in Paris?")  # reply.tool_calls: [{name, args, id}]
+msgs = [HumanMessage("What's the weather in Paris?"), reply]
+for call in reply.tool_calls:
+    msgs.append(ToolMessage(content=get_weather.invoke(call["args"]), tool_call_id=call["id"]))  # id MUST match
+print(mwt.invoke(msgs).text)</code></pre>
+<h3>Gotchas</h3>
+<ul><li>Type hints required; vague docstring = unusable tool (model decides from name+description+schema).</li><li>Validate args at boundary — model output is user input before it touches DB/shell.</li><li>Handle parallel <code>tool_calls</code> (iterate all); every call needs a paired <code>ToolMessage</code> or next call fails.</li></ul>
+<p><strong>Try it yourself:</strong> add an irrelevant calculator; verify routing.</p>
+</section>
+
+<section class="lesson" id="lesson-11">
+<h2>11 — Agents</h2>
+<p class="goal">Use <code>create_agent</code> correctly; know state/context/middleware and where LangGraph begins.</p>
+<p>An agent is a <strong>decision loop</strong>: model sees context+tools → calls tool or answers → result re-enters state → repeat until stop. 1.x entry point is <code>create_agent</code> (LangGraph under the hood → persistence/streaming/interrupts free).</p>
+<pre><code class="language-python">from langchain.agents import create_agent
+def get_weather(city: str) -&gt; str:
+    """Get current weather for a city."""
+    return f"It's always sunny in {city}!"
+agent = create_agent(model="openai:gpt-5.5", tools=[get_weather], system_prompt="You are helpful. Use tools when useful.")
+print(agent.invoke({"messages": [{"role": "user", "content": "Weather in SF?"}]})["messages"][-1].text)</code></pre>
+<h3>Middleware (the 1.x control plane)</h3>
+<table><thead><tr><th>Hook</th><th>Use for</th></tr></thead><tbody>
+<tr><td><code>before_agent</code></td><td>Validation, init, load info</td></tr>
+<tr><td><code>before_model</code></td><td>Trim history, enrich prompt/context</td></tr>
+<tr><td><code>wrap_model_call</code></td><td>Retries, fallbacks, model switching, profiling</td></tr>
+<tr><td><code>wrap_tool_call</code></td><td>Authz, error handling, logging, retries</td></tr>
+<tr><td><code>after_model</code></td><td>Guardrails, validation</td></tr>
+<tr><td><code>after_agent</code></td><td>Cleanup, audit, persistence</td></tr>
+</tbody></table>
+<pre><code class="language-python">from pydantic import BaseModel
+class FinalAnswer(BaseModel): answer: str; confidence: float
+a2 = create_agent(model="openai:gpt-5.5", tools=[get_weather], response_format=FinalAnswer)
+print(a2.invoke({"messages": [{"role": "user", "content": "Weather in SF?"}]})["structured_response"])</code></pre>
+<p>Use agents when step count/order is genuinely variable; use chains/explicit workflows when the path is known (cheaper, deterministic). Bound execution (time/steps/tool perms); never pre-bind tools before <code>create_agent</code> (pass raw model + <code>tools=[...]</code>). Reach for LangGraph directly for branches, parallel paths, custom transitions, long resumable interrupts, subgraphs/sub-agents.</p>
+<h3>Gotchas</h3>
+<ul><li>Agent ≠ autonomous program — it lives inside your tools/state/middleware/stops.</li><li>Tool errors need policy (validate, catch, return error strings, cap retries); persistence needs checkpointer; per-run identity belongs in context, durable facts in a store.</li></ul>
+<p><strong>Try it yourself:</strong> calculator + weather + error-returning tool; explain each routing decision from messages.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/agents">Agents</a>, <a href="https://reference.langchain.com/python/langchain/agents/factory/create_agent">create_agent</a>, <a href="https://docs.langchain.com/oss/python/langchain/middleware/overview">Middleware</a>, <a href="https://docs.langchain.com/oss/python/migrate/langchain-v1">Migration</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-12">
+<h2>12 — Streaming &amp; Execution Events</h2>
+<p class="goal">Choose the right stream shape: tokens vs state updates vs events.</p>
+<pre><code class="language-python">for chunk in model.stream("Explain transformers in 3 sentences."):  # AIMessageChunk
+    print(chunk.text, end="", flush=True)
+full = None
+for c in model.stream("Hi"): full = c if full is None else full + c
+
+for chunk in agent.stream({"messages": [{"role": "user", "content": "Weather in Boston?"}]}, stream_mode="messages", version="v2"):
+    if chunk["type"] == "messages": print(chunk["data"][0].text, end="", flush=True)
+# modes: messages (tokens/tool-call chunks) | updates (graph-node state) | custom (app progress). Combine as needed.
+async for ev in model.astream_events("Hello"):
+    if ev["event"] == "on_chat_model_stream": print(ev["data"]["chunk"].text, end="")
+chain_ = prompt | model | StrOutputParser()
+for t in chain_.stream({"question": "Why RAG?"}): print(t, end="", flush=True)</code></pre>
+<p><strong>Callbacks vs middleware:</strong> callbacks = passive observability/logging; middleware = active control (state, guardrails, routing). New agent behavior belongs in middleware. Streaming aids time-to-first-output, not total compute; design renderers for text/tool/state chunks; use async streaming in async apps; never copy cross-generation event loops without checking shape.</p>
+<p><strong>Try it yourself:</strong> same agent via <code>invoke</code> vs token stream vs updates; decide what the frontend sees.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/streaming">Streaming</a>, <a href="https://reference.langchain.com/python/langchain-core/runnables/base/Runnable">Runnable</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-13">
+<h2>13 — Observability with LangSmith</h2>
+<p class="goal">Trace runs to answer what the model saw, why tools fired, and where time went.</p>
+<p>Input/output pairs can't explain multi-step failures. LangSmith (optional, not required to run LangChain) records steps, rendered inputs, outputs, latency, tokens, errors, metadata. Custom code needs <code>@traceable</code>.</p>
+<pre><code class="language-bash">pip install -U langsmith
+export LANGSMITH_TRACING=true
+export LANGSMITH_API_KEY="ls__..."
+export LANGSMITH_PROJECT="my-project"  # set regional endpoint if non-US</code></pre>
+<table><thead><tr><th>Question</th><th>Trace reveals</th></tr></thead><tbody>
+<tr><td>What did the model receive?</td><td>Rendered messages/context, not template source</td></tr>
+<tr><td>Why this tool?</td><td>Calls, args, results, surrounding execution</td></tr>
+<tr><td>Where is latency?</td><td>Per-step timings + call counts</td></tr>
+<tr><td>What changed?</td><td>Comparable traces/experiments</td></tr>
+<tr><td>Regression test?</td><td>Failed run → dataset example</td></tr>
+</tbody></table>
+<p><strong>Tracing ≠ evaluation:</strong> tracing records what happened; evaluation judges quality. Flow: trace → inspect → dataset example → evaluate → compare. Traces contain prompts/docs/PII — redact, set retention/access/region deliberately. Local prints/callback tracers suffice for tiny scripts; LangSmith pays off for shared traces, experiments, and prod monitoring.</p>
+<p><strong>Try it yourself:</strong> trace Lesson 09 chain; name chunks, input, latency, output; save one failure as eval example.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/langsmith/observability-quickstart">Tracing quickstart</a>, <a href="https://docs.langchain.com/oss/python/langchain/overview">Overview</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-14">
+<h2>14 — Testing &amp; Evaluation</h2>
+<p class="goal">Test determinism with unit tests; judge quality with evals; score agents on outcome + trajectory.</p>
+<table><thead><tr><th>Layer</th><th>Question</th><th>Method</th></tr></thead><tbody>
+<tr><td>Unit/integration</td><td>Deterministic behavior?</td><td>pytest, mocks, schema/tool/filter tests</td></tr>
+<tr><td>Output eval</td><td>Answer good enough?</td><td>Exact match, reference scoring, LLM-judge (calibrated), RAG groundedness</td></tr>
+<tr><td>Trajectory</td><td>Acceptable path?</td><td>Tool choice/args/steps/recovery + outcome</td></tr>
+</tbody></table>
+<pre><code class="language-python">def test_prompt(): assert prompt.invoke({"question": "What is RAG?"}).to_messages()[-1].content == "What is RAG?"
+def test_tool_schema(): assert "location" in get_weather.args["properties"]
+
+from langsmith import Client
+client = Client()
+def target(inputs: dict): return {"answer": my_rag_chain.invoke({"question": inputs["question"]})}
+def exact_match(outputs, reference_outputs): return outputs["answer"] == reference_outputs["answer"]
+results = client.evaluate(target, data="my-rag-dataset", evaluators=[exact_match], experiment_prefix="rag-v1", max_concurrency=2)</code></pre>
+<p>Structure is <strong>dataset → target → evaluators</strong>. Build datasets from real usage/failures (easy, hard, unsupported, ambiguous, adversarial); score retrieval and groundedness separately so model isn't blamed for retrieval. Value is version comparison (prompt/model/retriever A vs B), not one score. Small datasets lie; LLM judges need rubrics + hand-labeled calibration; a right answer after a dangerous tool call is still a failure.</p>
+<p><strong>Try it yourself:</strong> 20-example RAG set (5 unsupported + 5 hard retrieval); change retriever, rerun.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/langsmith/evaluation-quickstart">Eval quickstart</a>, <a href="https://docs.langchain.com/oss/python/langchain/agents">Agents</a>.</p>
+</section>
+
+<section class="lesson" id="lesson-15">
+<h2>15 — Production Readiness</h2>
+<p class="goal">Ship a demo as a dependable service: reliability, security, data, observability, eval gates, ops.</p>
+<pre><code class="language-python">from langchain.chat_models import init_chat_model
+from langchain.rate_limiters import InMemoryRateLimiter
+model = init_chat_model("openai:gpt-5.5", timeout=30, max_retries=6,
+    rate_limiter=InMemoryRateLimiter(requests_per_second=0.5, check_every_n_seconds=0.1, max_bucket_size=10))
+resilient = model.with_retry(stop_after_attempt=3).with_fallbacks([backup_model])  # retries/fallbacks multiply cost + paths</code></pre>
+<p><code>InMemoryRateLimiter</code> is process-local — multi-worker needs gateway/queue/shared limiter + provider quotas. Bound agents (time/steps/tool perms) via middleware (limits, HITL approval, guardrails); validate + authorize every tool call (<code>untrusted input → schema → policy → execute → sanitized result</code>); never assume model-chosen = safe. Templates don't sanitize untrusted content — injection defense is architecture: least privilege, instruction/data separation, sandboxing, output controls, approval for impact.</p>
+<p>Persistence: durable checkpointer (not process memory) for threads; separate long-term store for durable facts. Manage context (trim/summarize/selective retrieval/compact tool outputs) — it affects correctness, not just cost. Measure tokens/latency first; smaller models, fewer calls, caching, streaming for perceived latency. Still need FastAPI/auth/secrets/queues/logging/CI-CD/rollback.</p>
+<table><thead><tr><th>Area</th><th>Minimum question</th></tr></thead><tbody>
+<tr><td>Reliability</td><td>Timeout/429/5xx/malformed/provider-outage behavior?</td></tr>
+<tr><td>Agent control</td><td>Bounds on calls, time, high-risk actions?</td></tr>
+<tr><td>Security</td><td>Injection, authz, secrets, sensitive tools?</td></tr>
+<tr><td>Data</td><td>State location, access, logging/PII?</td></tr>
+<tr><td>Retrieval</td><td>Tenant boundaries + provenance?</td></tr>
+<tr><td>Observability</td><td>End-to-end failed-run inspection?</td></tr>
+<tr><td>Evaluation</td><td>Regression detection pre/post deploy?</td></tr>
+<tr><td>Operations</td><td>Deploy, rollback, scale, rotate?</td></tr>
+</tbody></table>
+<p><strong>Try it yourself:</strong> one-page prod design for your Lesson 11 agent covering all rows above.</p>
+<p class="sources"><strong>Primary sources:</strong> <a href="https://docs.langchain.com/oss/python/langchain/models">Model resilience</a>, <a href="https://docs.langchain.com/oss/python/langchain/middleware/overview">Middleware</a>, <a href="https://docs.langchain.com/oss/python/langchain/short-term-memory">Memory</a>, <a href="https://docs.langchain.com/langsmith/observability-quickstart">Tracing</a>.</p>
+</section>
+
+    <footer>
+      <p>Developed by <a href="https://soroushesnaashari.github.io/">Soroush</a></p>
+    </footer>
+  </main>
+
+</body>
+</html>

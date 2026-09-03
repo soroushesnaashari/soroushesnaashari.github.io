@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gradient Descent — A Crash Course</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <style>
+    p.sources{font-size:0.88em;opacity:0.8;margin-top:1.2em;border-top:1px dashed rgba(128,128,128,0.3);padding-top:0.6em}
+    p.verification-note{font-size:0.92em;opacity:0.88;border-left:3px solid currentColor;padding-left:0.8em;margin:1em 0}
+    .callout{display:inline-block;font-size:0.75em;font-weight:600;letter-spacing:0.02em;text-transform:uppercase;padding:0.15em 0.55em;border-radius:0.3em;margin-right:0.4em;border:1px solid currentColor;opacity:0.9}
+    .callout.verify{color:#6d28d9}
+    .math{display:block;overflow-x:auto;margin:1rem 0;padding:0.6rem 0}
+    mjx-container{overflow-x:auto}
+  </style>
+</head>
+<body>
+
+  <nav id="toc" aria-label="Table of contents">
+    <ul>
+      <li><a href="#lesson-01"><span class="toc-title">Why Gradients Drive Learning</span><span class="toc-num">01</span></a></li>
+      <li><a href="#lesson-02"><span class="toc-title">The Optimization Problem</span><span class="toc-num">02</span></a></li>
+      <li><a href="#lesson-03"><span class="toc-title">Batch Gradient Descent</span><span class="toc-num">03</span></a></li>
+      <li><a href="#lesson-04"><span class="toc-title">Stochastic Gradient Descent</span><span class="toc-num">04</span></a></li>
+      <li><a href="#lesson-05"><span class="toc-title">Mini-Batch GD</span><span class="toc-num">05</span></a></li>
+      <li><a href="#lesson-06"><span class="toc-title">Problems of Vanilla GD</span><span class="toc-num">06</span></a></li>
+      <li><a href="#lesson-07"><span class="toc-title">Momentum &amp; First Moment</span><span class="toc-num">07</span></a></li>
+      <li><a href="#lesson-08"><span class="toc-title">Second Moment &amp; Adaptive Rates</span><span class="toc-num">08</span></a></li>
+      <li><a href="#lesson-09"><span class="toc-title">Adam Optimizer</span><span class="toc-num">09</span></a></li>
+      <li><a href="#lesson-10"><span class="toc-title">AdamW, Schedules &amp; Convergence</span><span class="toc-num">10</span></a></li>
+      <li><a href="#lesson-11"><span class="toc-title">Practical Playbook</span><span class="toc-num">11</span></a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header>
+      <h1><a href="/writing/gradient-descent/" style="text-decoration: none; color: inherit">Gradient Descent</a></h1>
+      <nav class="site-links">
+        <a href="/writing/langchain/">LangChain</a>
+        <a href="/writing/gradient-descent/">Gradient Descent</a>
+      </nav>
+    </header>
+
+    <section class="intro">
+      <p>This page is a self-contained crash course on gradient descent and modern adaptive optimizers — written for people who already know basic calculus and linear algebra and want the mathematics behind how neural networks actually learn. It covers the optimization problem, batch / stochastic / mini-batch GD, why vanilla GD fails, first and second moments, AdaGrad, RMSProp, Adam and AdamW, and practical convergence choices.</p>
+      <p>Read top to bottom — each lesson builds on the last. Notation is consistent throughout: \( \theta \in \mathbb{R}^d \) parameters, \( L(\theta) \) empirical loss, \( g_t = \nabla L(\theta_t) \) or stochastic estimate, \( \eta \) learning rate. Math is rendered with MathJax; code uses PyTorch-style pseudocode.</p>
+      <p class="verification-note"><span class="callout verify">Verification</span> Mathematics follows standard references (Boyd &amp; Vandenberghe, Goodfellow et al., Kingma &amp; Ba 2015, Loshchilov &amp; Hutter 2019). Code snippets are illustrative — check your framework docs for exact API signatures.</p>
+
+      <figure class="arch-diagram" role="img" aria-label="Diagram: loss landscape with gradient steps — vanilla GD zigzags in narrow valleys, momentum smooths, Adam adapts per-parameter step sizes.">
+        <svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:inherit;">
+          <defs><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker></defs>
+          <g stroke="currentColor" fill="none" stroke-width="1.2" opacity="0.9">
+            <ellipse cx="180" cy="140" rx="140" ry="90" stroke-dasharray="3,4" opacity="0.35"/>
+            <ellipse cx="180" cy="140" rx="95" ry="60" stroke-dasharray="2,3" opacity="0.35"/>
+            <ellipse cx="180" cy="140" rx="50" ry="30" fill="currentColor" fill-opacity="0.06"/>
+            <text x="180" y="220" fill="currentColor" font-size="10" text-anchor="middle" opacity="0.6">loss contours</text>
+          </g>
+          <g stroke="currentColor" fill="none" stroke-width="1.4">
+            <path d="M 70,90 L 85,115 L 70,130 L 95,150 L 80,165 L 110,180" marker-end="url(#arr2)" opacity="0.7"/>
+            <text x="70" y="80" fill="currentColor" font-size="11" text-anchor="middle">Vanilla GD</text>
+            <text x="70" y="240" fill="currentColor" font-size="9" text-anchor="middle" opacity="0.6">zigzag in valley</text>
+          </g>
+          <g stroke="currentColor" fill="none" stroke-width="1.6">
+            <path d="M 340,100 L 360,120 L 390,135 L 430,145" marker-end="url(#arr2)"/>
+            <text x="395" y="80" fill="currentColor" font-size="11" text-anchor="middle">+ Momentum</text>
+            <text x="395" y="240" fill="currentColor" font-size="9" text-anchor="middle" opacity="0.6">1st moment smooths</text>
+          </g>
+          <g stroke="currentColor" fill="none" stroke-width="1.6" stroke-dasharray="5,3">
+            <path d="M 620,90 L 650,110 L 700,130 L 730,145" marker-end="url(#arr2)"/>
+            <text x="675" y="80" fill="currentColor" font-size="11" text-anchor="middle">Adam</text>
+            <text x="675" y="240" fill="currentColor" font-size="9" text-anchor="middle" opacity="0.6">1st + 2nd moment, per-param \(\eta\)</text>
+          </g>
+          <g fill="currentColor" font-size="11" text-anchor="middle" opacity="0.7">
+            <text x="430" y="18">\(\theta_{t+1} = \theta_t - \eta_t \odot g_t\) with history → momentum → adaptive step</text>
+          </g>
+        </svg>
+        <figcaption style="font-size:0.85em;opacity:0.75;margin-top:6px;">Mental model: vanilla GD steps along the raw gradient; momentum averages the first moment to keep direction through noise and curvature; Adam adds the second moment to give each parameter its own effective step size.</figcaption>
+      </figure>
+    </section>
+
+    <section class="lesson" id="lesson-01">
+      <h2>01 — Why Gradients Drive Learning</h2>
+      <p class="goal">Understand the geometry the optimizer sees: loss surface, gradient as steepest descent, and why following it minimizes risk.</p>
+      <p>Learning is optimization. Given data \( \{(x_i, y_i)\}_{i=1}^n \) and a parametric model \( f(x;\theta) \), define a per-example loss \( \ell(f(x_i;\theta), y_i) \) (squared error, cross-entropy, …) and the empirical risk</p>
+      <p class="math">\[ L(\theta) = \frac{1}{n}\sum_{i=1}^n \ell(f(x_i;\theta), y_i). \]</p>
+      <p>Training means moving \( \theta \) downhill on the surface \( z = L(\theta) \). At any \( \theta \), the gradient \( \nabla L(\theta) = (\partial L/\partial \theta_1, \dots, \partial L/\partial \theta_d)^\top \) points in the direction of steepest ascent; \( -\nabla L \) is steepest descent. Taylor's theorem justifies it: \( L(\theta + \Delta) \approx L(\theta) + \nabla L(\theta)^\top \Delta \), so the biggest decrease for small \( \|\Delta\| \) is \( \Delta \propto -\nabla L \).</p>
+      <p>For smooth \( L \) with Lipschitz gradient \( \|\nabla L(x)-\nabla L(y)\| \le \beta\|x-y\| \), the descent lemma gives</p>
+      <p class="math">\[ L(y) \le L(x) + \nabla L(x)^\top (y-x) + \frac{\beta}{2}\|y-x\|^2, \]</p>
+      <p>which will bound how large a step we can safely take (Lesson 06). In non-convex deep learning, we still follow \( -\nabla L \) — not because the landscape is convex, but because it is the only locally computable descent direction and, iteratively, it finds useful minima in practice.</p>
+      <p><strong>Try it yourself:</strong> for \( L(w)= \tfrac12 (w-3)^2 \), hand-compute \( \nabla L(0) = -3 \) and verify \( -\nabla L \) points toward the minimizer \( w^*=3 \).</p>
+    </section>
+
+    <section class="lesson" id="lesson-02">
+      <h2>02 — The Optimization Problem</h2>
+      <p class="goal">State empirical vs expected risk, stationary points, and conditions for convergence.</p>
+      <p>We minimize empirical risk \( L(\theta) \); the true goal is expected risk \( R(\theta)=\mathbb{E}_{(x,y)}[\ell(f(x;\theta),y)] \). Minimizing \( L \) approximates minimizing \( R \) subject to generalization. A stationary point satisfies \( \nabla L(\theta^*)=0 \); it may be a global minimum, local minimum, saddle, or (rarely) flat maximizer. In high dimensions, strict saddles are abundant.</p>
+      <p>Classical convergence theory assumes convexity or smoothness:</p>
+      <ul>
+        <li><strong>Smoothness:</strong> \( \|\nabla L(x)-\nabla L(y)\|\le \beta\|x-y\| \). Steps up to \( 2/\beta \) can converge; \( \eta = 1/\beta \) is a safe heuristic.</li>
+        <li><strong>Strong convexity</strong> (\( \mu I \preceq \nabla^2 L \preceq \beta I \)): condition number \( \kappa=\beta/\mu \) controls speed; larger \( \kappa \) → slower (narrow valleys).</li>
+        <li><strong>Non-convex:</strong> gradient descent converges to stationary points; escaping saddles requires noise or momentum.</li>
+      </ul>
+      <p>Batch gradients cost \( O(nd) \) per step. That cost motivates stochastic approximations — the core trade-off of the next three lessons.</p>
+    </section>
+
+    <section class="lesson" id="lesson-03">
+      <h2>03 — Batch Gradient Descent</h2>
+      <p class="goal">Derive the exact update, cost, and when it is the right choice.</p>
+      <p>Batch (full-batch) GD uses the exact gradient over the whole dataset:</p>
+      <p class="math">\[ \theta_{t+1} = \theta_t - \eta \, \nabla L(\theta_t) = \theta_t - \eta \cdot \frac{1}{n}\sum_{i=1}^n \nabla \ell_i(\theta_t). \]</p>
+      <pre><code class="language-python">for t in range(T):
+    g = grad(L, theta)          # over all n examples
+    theta -= eta * g
+    if norm(g) &lt; tol: break</code></pre>
+      <p><strong>Properties:</strong> deterministic, same trajectory each run, monotonic decrease if \( \eta \) small enough (by descent lemma). For smooth convex \( L \), error after \( T \) steps is \( O(1/T) \); for strongly convex, linear \( O((1-\mu/\beta)^T) \).</p>
+      <p><strong>Cost:</strong> \( n \) forward+backward passes per step — prohibitive at \( n \gg 10^4 \). Memory for gradient is \( O(d) \), but data must be visited entirely.</p>
+      <p><strong>When to use:</strong> small datasets, convex problems, or when exact gradients are needed for debugging/line search. In deep learning, almost never — mini-batch dominates.</p>
+      <h3>Gotchas</h3>
+      <ul><li>Exactness is not always helpful: in non-convex landscapes, determinism can trap you in sharp local minima that noisy updates would escape.</li></ul>
+    </section>
+
+    <section class="lesson" id="lesson-04">
+      <h2>04 — Stochastic Gradient Descent</h2>
+      <p class="goal">Treat the gradient as a random estimator; understand unbiasedness, variance, and the price of one example.</p>
+      <p>SGD replaces the full average with one random example \( i_t \sim \mathrm{Uniform}\{1..n\} \):</p>
+      <p class="math">\[ g_t = \nabla \ell_{i_t}(\theta_t), \qquad \mathbb{E}_{i_t}[g_t \mid \theta_t] = \nabla L(\theta_t) \; (\text{unbiased}), \]</p>
+      <p class="math">\[ \theta_{t+1} = \theta_t - \eta_t \, g_t. \]</p>
+      <p>Unbiasedness follows because \( \frac1n\sum_i \nabla \ell_i = \nabla L \). Variance is</p>
+      <p class="math">\[ \mathrm{Var}(g_t) = \frac1n\sum_i \|\nabla \ell_i(\theta) - \nabla L(\theta)\|^2, \]</p>
+      <p>and it does not vanish even at the optimum unless all gradients agree (overparameterized interpolation). Hence fixed \( \eta \) leaves SGD hovering in a ball of radius \( O(\eta \cdot \text{Var}) \) around the minimizer.</p>
+      <p><strong>Convergence:</strong> with decaying \( \eta_t = \eta_0/\sqrt{t} \) (convex) or \( \eta_t \propto 1/t \) (strongly convex), SGD converges in expectation at \( O(1/\sqrt{T}) \) and \( O(1/T) \) respectively — slower than GD, but each step is \( n\times \) cheaper, so wall-clock wins for large \( n \).</p>
+      <pre><code class="language-python">for epoch in range(epochs):
+    perm = torch.randperm(n)
+    for i in perm:               # single-example loop
+        g = grad(ell[i], theta)
+        theta -= eta_t * g</code></pre>
+      <p><strong>Gotchas:</strong> single-example noise makes loss non-monotonic; gradient clipping often helps; learning rate must decay or schedule, otherwise no convergence.</p>
+      <p><strong>Try it yourself:</strong> estimate variance empirically: sample 100 stochastic gradients at a fixed \( \theta \) and plot their spread versus the batch gradient.</p>
+      <p class="sources"><strong>Primary sources:</strong> Bottou et al., <em>Optimization Methods for Large-Scale ML</em>; Robbins &amp; Monro 1951.</p>
+    </section>
+
+    <section class="lesson" id="lesson-05">
+      <h2>05 — Mini-Batch Gradient Descent</h2>
+      <p class="goal">Balance variance and throughput; see why powers of two dominate in practice.</p>
+      <p>Mini-batch samples \( B_t \subset \{1..n\}, |B_t|=B \) (typically 32–512):</p>
+      <p class="math">\[ g_t^{(B)} = \frac{1}{B}\sum_{i\in B_t} \nabla \ell_i(\theta_t), \qquad \mathbb{E}[g_t^{(B)}]=\nabla L(\theta_t), \]</p>
+      <p class="math">\[ \mathrm{Var}(g_t^{(B)}) = \frac{1}{B}\,\mathrm{Var}(g_t^{(1)}). \]</p>
+      <p>Variance shrinks as \( 1/B \) (sampling without replacement even better). Update is</p>
+      <p class="math">\[ \theta_{t+1} = \theta_t - \eta_t \, g_t^{(B)}. \]</p>
+      <table><thead><tr><th>Variant</th><th>Batch size</th><th>Variance</th><th>Throughput</th></tr></thead><tbody>
+        <tr><td>SGD</td><td>1</td><td>High \( \sigma^2 \)</td><td>Poor GPU util</td></tr>
+        <tr><td>Mini-batch</td><td>32–512</td><td>\( \sigma^2/B \)</td><td>Vectorized, fast</td></tr>
+        <tr><td>Batch GD</td><td>\( n \)</td><td>0</td><td>One step per epoch</td></tr>
+      </tbody></table>
+      <p>Hardware favors \( B \) that fills GPU/TPU lanes (powers of two, multiples of 32). Larger \( B \) allows larger \( \eta \) (linear scaling rule: double \( B \) → double \( \eta \) up to a limit) and reduces steps per epoch, but too large hurts generalization (sharp minima hypothesis) and wastes samples. Sweet spot is empirical — tune it.</p>
+      <pre><code class="language-python">for x_batch, y_batch in DataLoader(dataset, batch_size=128, shuffle=True):
+    loss = criterion(model(x_batch), y_batch)
+    loss.backward()
+    optimizer.step(); optimizer.zero_grad()</code></pre>
+      <p class="sources"><strong>Primary sources:</strong> Goyal et al. 2017 (large-batch training); Keskar et al. 2017.</p>
+    </section>
+
+    <section class="lesson" id="lesson-06">
+      <h2>06 — Problems of Vanilla GD</h2>
+      <p class="goal">Diagnose why a single global \(\eta\) fails on realistic loss surfaces.</p>
+      <p>Vanilla GD \( \theta_{t+1}=\theta_t - \eta g_t \) has four fundamental weaknesses:</p>
+      <table><thead><tr><th>Problem</th><th>Symptom</th><th>Root cause</th></tr></thead><tbody>
+        <tr><td>Curvature / ill-conditioning</td><td>Zigzag in narrow valleys, slow in flat directions</td><td>\( \kappa = \beta/\mu \gg 1 \); same \( \eta \) can't suit both axes</td></tr>
+        <tr><td>Saddle points &amp; plateaus</td><td>Gradient ≈ 0, no progress</td><td>High-dim saddles abundant; \( \|\nabla L\|\approx 0 \) stalls step</td></tr>
+        <tr><td>Noise (SGD)</td><td>Oscillation, never converges with fixed \( \eta \)</td><td>Variance \( \sigma^2 \) keeps steps random</td></tr>
+        <tr><td>Learning-rate sensitivity</td><td>Divergence if too large, crawl if too small</td><td>Descent lemma: need \( \eta < 2/\beta \)</td></tr>
+      </tbody></table>
+      <p><strong>Learning-rate effects:</strong></p>
+      <ul>
+        <li>\( \eta > 2/\beta \) → overshoot, may diverge.</li>
+        <li>\( \eta \approx 1/\beta \) → conservative, monotone but slow.</li>
+        <li>\( \eta_t \) decaying \( \propto 1/t \) or cosine/step schedule needed for SGD to converge.</li>
+      </ul>
+      <p><strong>Geometry intuition:</strong> for a 2-D quadratic \( L=\tfrac12(\kappa x^2 + y^2) \), gradients point across the valley (steep \( x \)), not along it. Vanilla GD bounces wall-to-wall. Preconditioning by curvature \( H^{-1} \) would fix it — but \( H^{-1} \) is \( O(d^2) \); adaptive methods approximate its diagonal.</p>
+      <p><strong>Other failure modes:</strong> vanishing/exploding gradients in deep nets (chain-rule product), sharp minima that generalize poorly, dependence on initialization.</p>
+    </section>
+
+    <section class="lesson" id="lesson-07">
+      <h2>07 — Momentum &amp; First Moment</h2>
+      <p class="goal">Derive exponential moving average of gradients; see how it dampens oscillation and accelerates through ravines.</p>
+      <p>Idea: average past gradients so the step remembers direction. Define the first moment (exponential moving average) with decay \( \beta_1 \in [0,1) \) (often 0.9):</p>
+      <p class="math">\[ m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t, \qquad m_0 = 0, \]</p>
+      <p>which expands to</p>
+      <p class="math">\[ m_t = (1-\beta_1)\sum_{k=1}^t \beta_1^{t-k} g_k. \]</p>
+      <p>Classical (Polyak) momentum uses the equivalent form with velocity \( v_t \):</p>
+      <p class="math">\[ v_t = \mu v_{t-1} - \eta g_t, \qquad \theta_{t+1} = \theta_t + v_t, \quad \mu \approx 0.9. \]</p>
+      <p>With bias correction (Adam-style) the unbiased estimate is \( \hat m_t = m_t/(1-\beta_1^t) \); early steps are otherwise dampened because \( m_0=0 \).</p>
+      <p><strong>Why it helps:</strong></p>
+      <ul>
+        <li>Along consistent descent direction, \( m_t \) accumulates → larger effective step (≈ \( \eta/(1-\mu) \) in steady state).</li>
+        <li>Across noisy/sign-flipping directions, averaging cancels → dampened zigzag, lower variance by factor \( (1-\beta_1)/(1+\beta_1) \) for i.i.d. noise.</li>
+        <li>Through saddle/plateau, inertia carries the iterate forward where \( \|g\| \approx 0 \).</li>
+      </ul>
+      <p><strong>Nesterov accelerated gradient (NAG):</strong> look-ahead variant</p>
+      <p class="math">\[ g_t = \nabla L(\theta_t + \mu v_{t-1}), \quad v_t = \mu v_{t-1} - \eta g_t, \quad \theta_{t+1}=\theta_t + v_t, \]</p>
+      <p>which anticipates where momentum will carry us and corrects, achieving \( O(1/T^2) \) on smooth convex problems — optimal among first-order methods.</p>
+      <p><strong>Effective memory:</strong> half-life \( \approx 1/(1-\beta_1) \) steps; \( \beta_1=0.9 \) → ~10 steps, 0.99 → ~100.</p>
+      <pre><code class="language-python"># PyTorch: torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.9, nesterov=True)</code></pre>
+      <p class="sources"><strong>Primary sources:</strong> Polyak 1964; Nesterov 1983; Sutskever et al. 2013.</p>
+    </section>
+
+    <section class="lesson" id="lesson-08">
+      <h2>08 — Second Moment &amp; Adaptive Rates</h2>
+      <p class="goal">Make the step size per-parameter: large where gradients are sparse, small where they are large.</p>
+      <p>Observation: different parameters need different scales. Embedding weights see sparse gradients; biases see dense. Second moment estimates track per-coordinate magnitude:</p>
+      <p class="math">\[ v_t = \beta_2 v_{t-1} + (1-\beta_2) \, g_t^2, \qquad v_t \in \mathbb{R}^d \; (\text{elementwise}). \]</p>
+      <p>Its expectation approximates \( \mathbb{E}[g^2] \); dividing by \( \sqrt{v_t} \) rescales steps inversely to typical magnitude.</p>
+      <h3>AdaGrad</h3>
+      <p>Accumulates all past squared gradients (no decay):</p>
+      <p class="math">\[ G_t = G_{t-1} + g_t^2,\quad G_0=0, \qquad \theta_{t+1}= \theta_t - \frac{\eta}{\sqrt{G_t+\varepsilon}}\odot g_t. \]</p>
+      <p>Per-coordinate \( \eta_{t,j} = \eta / \sqrt{\sum_{k\le t} g_{k,j}^2 + \varepsilon} \). Infrequent features keep large steps; frequent ones anneal. Problem: \( G_t \) grows monotonically → \( \eta_{t}\to 0 \), premature stop on non-convex problems.</p>
+      <h3>RMSProp</h3>
+      <p>Fixes AdaGrad by exponential decay (Hinton, 2012; \( \beta_2 \approx 0.99 \), also called \( \rho \) or \( \gamma \)):</p>
+      <p class="math">\[ v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2, \qquad \theta_{t+1}= \theta_t - \frac{\eta}{\sqrt{v_t}+\varepsilon}\odot g_t. \]</p>
+      <p>Now the denominator forgets old magnitudes → non-vanishing steps, stable on non-convex. \( \varepsilon \sim 10^{-8} \) prevents division by zero.</p>
+      <table><thead><tr><th>Method</th><th>Memory</th><th>Effective \(\eta_j\)</th><th>Weakness</th></tr></thead><tbody>
+        <tr><td>AdaGrad</td><td>Full history</td><td>\( \eta / \sqrt{\sum g^2} \to 0 \)</td><td>Dies early</td></tr>
+        <tr><td>RMSProp</td><td>EMA \( \beta_2\)</td><td>\( \eta / \sqrt{v_t} \) breathing</td><td>No momentum</td></tr>
+      </tbody></table>
+      <p>Interpretation: \( v_t \) approximates diagonal of \( \mathbb{E}[gg^\top] \) → diagonal preconditioner \( \mathrm{diag}(v_t)^{-1/2} \) that rescales the loss surface toward isotropy.</p>
+      <p class="sources"><strong>Primary sources:</strong> Duchi et al. 2011 (AdaGrad); Tieleman &amp; Hinton 2012 (RMSProp).</p>
+    </section>
+
+    <section class="lesson" id="lesson-09">
+      <h2>09 — Adam Optimizer</h2>
+      <p class="goal">Combine first and second moments with bias correction; understand every symbol in the update.</p>
+      <p>Adam (Kingma &amp; Ba, 2015) = momentum + RMSProp + bias correction. Hyperparameters: \( \beta_1=0.9, \beta_2=0.999, \varepsilon=10^{-8}, \eta\) (often \(10^{-3}\)). State: \( m_0=0, v_0=0 \in \mathbb{R}^d \).</p>
+      <p>At step \( t \) with stochastic gradient \( g_t \):</p>
+      <p class="math">\[ m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t \qquad \text{(first moment)} \]</p>
+      <p class="math">\[ v_t = \beta_2 v_{t-1} + (1-\beta_2) \, g_t^2 \qquad \text{(second moment, elementwise)} \]</p>
+      <p>Bias-corrected (unbiased if \( g_t \) stationary):</p>
+      <p class="math">\[ \hat m_t = \frac{m_t}{1-\beta_1^t}, \qquad \hat v_t = \frac{v_t}{1-\beta_2^t}. \]</p>
+      <p>Update:</p>
+      <p class="math">\[ \theta_{t+1} = \theta_t - \eta \cdot \frac{\hat m_t}{\sqrt{\hat v_t} + \varepsilon} \quad (\text{elementwise}). \]</p>
+      <p><strong>Why bias correction matters:</strong> with \( m_0=v_0=0 \), early \( m_t, v_t \) are pulled toward zero by \( \beta^t \) weight. Dividing by \( 1-\beta^t \) removes that initialization bias so step size is correct from \( t=1 \). Without it, Adam would crawl at start.</p>
+      <p><strong>Reading the formula:</strong></p>
+      <ul>
+        <li>\( \hat m_t \) = smoothed descent direction (momentum).</li>
+        <li>\( \sqrt{\hat v_t} \) = per-parameter RMS gradient magnitude → adaptive denominator.</li>
+        <li>Ratio \( \hat m_t / \sqrt{\hat v_t} \) ≈ sign-normalized, curvature-normalized step (≈ ±1 in each coordinate when gradients are consistent).</li>
+        <li>\( \varepsilon \) inside denominator guards against \( v\approx 0 \) explosion and sets a max step \( \approx \eta/\varepsilon \) (numerical, not theoretical).</li>
+      </ul>
+      <p><strong>Invariance:</strong> rescaling any coordinate's gradient by \( c \) rescales numerator and denominator by \( c \) → Adam's step is invariant to diagonal rescaling, unlike SGD. This is why it tolerates mixed-magnitude layers.</p>
+      <p><strong>Convergence note:</strong> Adam converges on convex problems with appropriate \( \eta_t \) but can fail to converge with constant \( \eta \) on some non-convex examples (Reddi et al. 2018); AMSGrad fixes by \( \hat v_t \leftarrow \max(\hat v_t, v_t) \).</p>
+      <pre><code class="language-python">opt = torch.optim.Adam(model.parameters(), lr=1e-3, betas=(0.9, 0.999), eps=1e-8)
+# AMSGrad variant
+opt = torch.optim.Adam(model.parameters(), lr=1e-3, amsgrad=True)</code></pre>
+      <p><strong>Gotchas:</strong> \( \beta_2 \) very close to 1 → slow adaptation; too large \( \varepsilon \) kills adaptivity; weight decay must be decoupled (Lesson 10).</p>
+      <p class="sources"><strong>Primary sources:</strong> Kingma &amp; Ba 2015 (Adam); Reddi et al. 2018 (Adam non-convergence).</p>
+    </section>
+
+    <section class="lesson" id="lesson-10">
+      <h2>10 — AdamW, Schedules &amp; Convergence</h2>
+      <p class="goal">Fix Adam's weight decay, schedule the learning rate, and choose an optimizer deliberately.</p>
+      <h3>AdamW: Decoupled Weight Decay</h3>
+      <p>\( \ell_2 \) regularization \( \frac{\lambda}{2}\|\theta\|^2 \) naively adds \( \lambda\theta \) to \( g_t \); under Adam's adaptive denominator this gets rescaled incorrectly (strong regularization where \( v \) is large). Loshchilov &amp; Hutter (2019) decouple it:</p>
+      <p class="math">\[ \theta_{t+1} = \theta_t - \eta \frac{\hat m_t}{\sqrt{\hat v_t}+\varepsilon} - \eta \lambda \theta_t. \]</p>
+      <p>Decay is now applied after the adaptive step, independent of \( v_t \). In practice this is what <code>weight_decay</code> should mean; use AdamW for transformers/LLMs, not Adam+ \( \ell_2 \).</p>
+      <pre><code class="language-python">opt = torch.optim.AdamW(model.parameters(), lr=1e-4, betas=(0.9, 0.999), weight_decay=0.01)</code></pre>
+      <h3>Learning-Rate Schedules</h3>
+      <table><thead><tr><th>Schedule</th><th>Formula</th><th>Use</th></tr></thead><tbody>
+        <tr><td>Step decay</td><td>\( \eta_t = \eta_0 \gamma^{\lfloor t/s\rfloor}\)</td><td>Simple, needs tuning of \(s,\gamma\)</td></tr>
+        <tr><td>Cosine anneal</td><td>\( \eta_t = \eta_{\min}+ \tfrac12(\eta_{\max}-\eta_{\min})(1+\cos(\pi t/T))\)</td><td>Smooth, popular for AdamW</td></tr>
+        <tr><td>Linear warmup → cosine</td><td>Warmup \( \eta \uparrow \) then cosine ↓</td><td>Transformers: stabilizes early Adam variance</td></tr>
+        <tr><td>ReduceOnPlateau</td><td>Cut on metric stall</td><td>Adaptive fallback</td></tr>
+      </tbody></table>
+      <h3>When to Use What</h3>
+      <table><thead><tr><th>Optimizer</th><th>When</th><th>Typical \(\eta\)</th></tr></thead><tbody>
+        <tr><td>SGD + momentum (0.9)</td><td>CV, strong generalization, tuned LR</td><td>0.01–0.1 + schedule</td></tr>
+        <tr><td>AdamW</td><td>LLMs, transformers, sparse/mixed scales</td><td>1e-4–3e-4 + warmup+cosine</td></tr>
+        <tr><td>Adam</td><td>Prototyping, small models</td><td>1e-3</td></tr>
+        <tr><td>Lion / Adafactor</td><td>Memory-constrained LLM training</td><td>See papers</td></tr>
+      </tbody></table>
+      <h3>Convergence Cheat Sheet</h3>
+      <ul>
+        <li>Convex smooth: GD \(O(1/T)\), SGD \(O(1/\sqrt{T})\), Nesterov \(O(1/T^2)\) optimal.</li>
+        <li>Non-convex: all first-order converge to stationary points at \( O(1/\sqrt{T}) \) in \(\min_t \|\nabla L\|^2\); noise/momentum help escape saddles.</li>
+        <li>Effective step of Adam is \( \approx \eta \cdot \mathrm{sign}(m)/\sqrt{v} \) — clips extremes automatically.</li>
+      </ul>
+      <p class="sources"><strong>Primary sources:</strong> Loshchilov &amp; Hutter 2019 (AdamW); Loshchilov &amp; Hutter SGDR; Smith 2017 (warmup).</p>
+    </section>
+
+    <section class="lesson" id="lesson-11">
+      <h2>11 — Practical Playbook</h2>
+      <p class="goal">Translate theory into a reproducible training recipe.</p>
+      <p><strong>Defaults that work:</strong> AdamW (\( \beta_1=0.9, \beta_2=0.999 \)), warmup 1–5% of steps, cosine decay to 10% of peak, weight decay 0.01 (transformers) / 1e-4 (CV), gradient clip 1.0, batch size 128–512 tuned to hardware.</p>
+      <p><strong>Diagnostics:</strong> loss NaN → reduce \( \eta \), clip gradients; loss plateau → increase \( \eta \) or schedule; train \(\gg\) val → weak regularization / smaller batch; slow in valley → add momentum; diverged AdaGrad → switch to RMSProp/Adam.</p>
+      <p><strong>Invariance check:</strong> multiply one layer's loss scale by 10; SGD diverges, Adam unchanged — proves second moment adaptation.</p>
+      <pre><code class="language-python"># Full recipe
+model = MyModel()
+opt = torch.optim.AdamW(model.parameters(), lr=3e-4, betas=(0.9, 0.999), weight_decay=0.01)
+sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=epochs)
+for epoch in range(epochs):
+    for x, y in loader:
+        opt.zero_grad()
+        loss = criterion(model(x), y)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        opt.step()
+    sched.step()
+    print(f"epoch {epoch}: loss={loss.item():.4f} lr={sched.get_last_lr()[0]:.2e}")</code></pre>
+      <h3>Gotchas</h3>
+      <ul>
+        <li><strong>Weight decay placement:</strong> <code>Adam(..., weight_decay=...)</code> in old PyTorch is \( \ell_2 \), not AdamW — use <code>AdamW</code>.</li>
+        <li><strong>Epsilon matters:</strong> too large kills per-param adaptivity; too small causes \( \eta/\sqrt{v} \) blow-up on sparse params.</li>
+        <li><strong>Batch size vs LR:</strong> linear scaling holds to a point; beyond, keep LR and train longer or use LAMB/LARS.</li>
+        <li><strong>Seed the noise:</strong> SGD trajectory is random — fix seed for reproducibility, but test multiple seeds before claiming an optimizer "wins".</li>
+      </ul>
+      <p><strong>Try it yourself:</strong> train the same MLP twice — once with SGD+momentum (lr 0.05), once with AdamW (lr 3e-4) — and compare wall-clock to 95% accuracy and final validation gap.</p>
+    </section>
+
+    <footer>
+      <p>Developed by <a href="https://soroushesnaashari.github.io/">Soroush</a></p>
+    </footer>
+  </main>
+
+</body>
+</html>
