@@ -6,7 +6,7 @@
     <title>Soroush Esnaashari</title>
     <link rel="stylesheet" href="../styles.css">
     <style>
-        .timeline { position: relative; margin: 1.5rem 0 0 14px; padding-left: 28px; }
+        .timeline { position: relative; margin: 1.5rem 0 0 0px; padding-left: 28px; }
         .timeline::before {
             content: "";
             position: absolute;
@@ -31,6 +31,8 @@
             box-sizing: border-box;
         }
         .timeline-entry h3 { margin-top: 0; }
+        .entry-line { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+        .entry-date { text-align: right; white-space: nowrap; }
         @media (max-width: 600px) {
             .timeline { margin-left: 8px; padding-left: 22px; }
             .timeline::before { left: 5px; }
@@ -55,15 +57,15 @@
         <div class="timeline">
             <div class="timeline-entry">
                 <h3>Master of Science (M.Sc.), Computer Science</h3>
-                <p style="font-weight: 600;"><a href="https://ctb.iau.ir/en" target="_blank">Islamic Azad University Central Tehran Branch</a> · 2025 - Present<br>
-                GPA: 18.92/20 (3.80/4)</p>
+                <p style="font-weight: 500;" class="entry-line"><span><a href="https://ctb.iau.ir/en" target="_blank">Islamic Azad University Central Tehran Branch</a></span><span class="entry-date">2025 - Present</span></p>
+                <p>GPA: 18.92/20 (3.80/4)</p>
             </div>
 
             <div class="timeline-entry">
                 <h3>Bachelor of Science (B.Sc.), Industrial Engineering</h3>
-                <p style="font-weight: 600;"><a href="https://ctb.iau.ir/en" target="_blank">Islamic Azad University Central Tehran Branch</a> · 2020 – 2024<br>
-                GPA: 17.87/20 (3.65/4) — Last Two Years: 19.01/20 (3.92/4)<br>
-                Final Project: Artificial Intelligence and its Applications in Industrial Engineering<br>Supervisor: <a href="https://www.linkedin.com/in/parisa-shahnazari-shahrezaei-31854042/" target="_blank">Prof. Parisa Shahnazari-Shahrezaei</a></p>
+                <p style="font-weight: 500;" class="entry-line"><span><a href="https://ctb.iau.ir/en" target="_blank">Islamic Azad University Central Tehran Branch</a></span><span class="entry-date">2020 – 2024</span></p>
+                <p>GPA: 17.87/20 (3.65/4) — Last Two Years: 19.01/20 (3.92/4)</p>
+                <p>Final Project: Artificial Intelligence and its Applications in Industrial Engineering<br>Supervisor: professor <a href="https://www.linkedin.com/in/parisa-shahnazari-shahrezaei-31854042/" target="_blank">Parisa Shahnazari-Shahrezaei</a></p>
             </div>
         </div>
 
@@ -72,25 +74,25 @@
 
         <div class="timeline">
             <div class="timeline-entry">
-                <h3>Data Engineer</h3>
-                <p style="margin-bottom: 0.3rem; font-weight: 600;"><a href="https://www.alalinks.com/" target="_blank">AlaLinks</a> (Part-time) · January 2026 – Present · Toronto, CA</p>
-                <p style="margin-bottom: 0.3rem; font-weight: 600;"><a href="https://www.alalinks.com/" target="_blank">AlaLinks</a> (Internship) · July 2025 – January 2026 · Toronto, CA</p>
+                <h3>Data Engineer <small>(Toronto, Canada)</small></h3>
+                <p style="margin-bottom: 0.3rem" class="entry-line"><span><a href="https://www.alalinks.com/" target="_blank">AlaLinks</a> <small>(Part-time) (Remote)</small></span><span class="entry-date">Jan 2026 – Present</span></p>
+                <p style="margin-bottom: 0.3rem" class="entry-line"><span><a href="https://www.alalinks.com/" target="_blank">AlaLinks</a> <small>(Internship) (Remote)</small></span><span class="entry-date">Jul 2025 – Jan 2026</span></p>
             </div>
 
             <div class="timeline-entry">
-                <h3>Member of Industrial Engineering Scientific Association</h3>
-                <p style="font-weight: 600;"><a href="https://ctb.iau.ir/en" target="_blank">Islamic Azad University Central Tehran Branch</a> · November 2023 – August 2024 · Tehran, IR</p>
+                <h3>Member of Scientific Association <small>(Tehran, Iran)</small></h3>
+                <p class="entry-line"><span><a href="https://ctb.iau.ir/en" target="_blank">Islamic Azad University Central Tehran Branch</a></span><span class="entry-date">Nov 2023 – Aug 2024</span></p>
             </div>
 
             <div class="timeline-entry">
-                <h3>Project Manager</h3>
-                <p style="margin-bottom: 0.3rem; font-weight: 600;"><a href="https://modirporoje.com/" target="_blank">Parsis Mandegar Royan</a> (Part-time) · November 2023 – July 2024 · Tehran, IR</p>
-                <p style="margin-bottom: 0.3rem; font-weight: 600;"><a href="https://modirporoje.com/" target="_blank">Parsis Mandegar Royan</a> (Internship) · October 2023 – November 2023 · Tehran, IR</p>
+                <h3>Project Manager <small>(Tehran, Iran)</small></h3>
+                <p style="margin-bottom: 0.3rem" class="entry-line"><span><a href="https://modirporoje.com/" target="_blank">Parsis Mandegar Royan</a> <small>(Part-time) (On-site)</small></span><span class="entry-date">Nov 2023 – Jul 2024</span></p>
+                <p style="margin-bottom: 0.3rem" class="entry-line"><span><a href="https://modirporoje.com/" target="_blank">Parsis Mandegar Royan</a> <small>(Internship) (On-site)</small></span><span class="entry-date">Oct 2023 – Nov 2023</span></p>
             </div>
 
             <div class="timeline-entry">
-                <h3>English Teacher</h3>
-                <p style="font-weight: 600;"><a href="https://www.instagram.com/educatech_ir/" target="_blank">Educatech</a> (Hybrid) · January 2021 – March 2021 · Tehran, IR</p>
+                <h3>English Teacher <small>(Tehran, Iran)</small></h3>
+                <p class="entry-line"><span><a href="https://www.instagram.com/educatech_ir/" target="_blank">Educatech</a> <small>(Part-time) (Hybrid)</small></span><span class="entry-date">Jan 2021 – Mar 2021</span></p>
             </div>
         </div>
 
