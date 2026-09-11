@@ -42,19 +42,41 @@ header h1 a {
   color: inherit;
 }
 
-nav.site-links {
+header nav {
   display: flex;
 }
 
-nav.site-links a {
+header nav a {
   margin-left: 1rem;
   color: #777;
   text-decoration: none;
   font-size: 0.75rem;
 }
 
-nav.site-links a:hover {
+header nav a:hover,
+header nav a.active {
   color: #000;
+}
+
+/* ---------- Article title (matches firstblog/secondblog pattern) ---------- */
+
+.article-header h2 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.blog-meta {
+  font-size: 0.75rem;
+  color: #777;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.blog-category {
+  color: #777;
 }
 
 /* ---------- Global text justification ---------- */
