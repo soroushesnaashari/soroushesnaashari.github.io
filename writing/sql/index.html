@@ -6,24 +6,18 @@
   <title>SQL — A Crash Course</title>
   <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
-  <style>
-    .level-label {
-      font-size: 0.75rem;
-      color: #777;
-      margin-bottom: 0.25rem;
-    }
-  </style>
 </head>
 <body>
   <nav id="toc" aria-label="Table of contents">
     <ul>
-      <li><a href="#lesson-01"><span class="toc-title">Fundamentals</span><span class="toc-num">01</span></a></li>
-      <li><a href="#lesson-02"><span class="toc-title">Querying Data</span><span class="toc-num">02</span></a></li>
-      <li><a href="#lesson-03"><span class="toc-title">Aggregation &amp; Grouping</span><span class="toc-num">03</span></a></li>
-      <li><a href="#lesson-04"><span class="toc-title">JOINs &amp; Multi-Table SQL</span><span class="toc-num">04</span></a></li>
-      <li><a href="#lesson-05"><span class="toc-title">Advanced SQL</span><span class="toc-num">05</span></a></li>
+      <li><a href="#lesson-01"><span class="toc-title">Tables, Keys &amp; Basic SQL</span><span class="toc-num">01</span></a></li>
+      <li><a href="#lesson-02"><span class="toc-title">Filtering, Sorting &amp; SELECT</span><span class="toc-num">02</span></a></li>
+      <li><a href="#lesson-03"><span class="toc-title">Aggregation &amp; GROUP BY</span><span class="toc-num">03</span></a></li>
+      <li><a href="#lesson-04"><span class="toc-title">Combining Tables with JOINs</span><span class="toc-num">04</span></a></li>
+      <li><a href="#lesson-05"><span class="toc-title">Advanced Queries: CTEs &amp; Windows</span><span class="toc-num">05</span></a></li>
     </ul>
   </nav>
+
   <main>
     <header>
       <h1><a href="https://soroushesnaashari.github.io" style="text-decoration: none; color: inherit">Soroush Esnaashari</a></h1>
@@ -34,6 +28,7 @@
         <a href="/writing" class="active">Writing</a>
       </nav>
     </header>
+
     <div class="article-header">
       <h2>SQL</h2>
       <div class="blog-meta">
@@ -41,45 +36,19 @@
         <span class="blog-category">Category: SQL</span>
       </div>
     </div>
+
     <section class="intro">
       <p>This page is a self-contained crash course on SQL, designed to take a learner from basic database concepts to practical querying and analytical SQL.</p>
-      <p>Read top to bottom — each level builds on the last. The course covers database fundamentals, querying and filtering, aggregation and grouping, JOINs across multiple tables, and advanced SQL such as CTEs and window functions.</p>
-      <p>The examples use small, readable tables so the focus stays on understanding how SQL works and when to use each feature.</p>
-      <figure class="arch-diagram" role="img" aria-label="Diagram showing a simple relational database with Students, Courses, and Enrollments tables connected by primary and foreign keys.">
-        <svg viewBox="0 0 860 280" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:inherit;">
-          <g stroke="currentColor" fill="none" stroke-width="1.2" opacity="0.85">
-            <rect x="45" y="45" width="210" height="150" rx="4"/>
-            <rect x="325" y="45" width="210" height="150" rx="4"/>
-            <rect x="605" y="45" width="210" height="150" rx="4"/>
-            <path d="M255 120 H325"/>
-            <path d="M535 120 H605"/>
-          </g>
-          <g fill="currentColor" font-size="12">
-            <text x="150" y="70" text-anchor="middle" font-weight="600">Students</text>
-            <text x="150" y="100">id — PRIMARY KEY</text>
-            <text x="150" y="124">name</text>
-            <text x="150" y="148">age</text>
-            <text x="430" y="70" text-anchor="middle" font-weight="600">Enrollments</text>
-            <text x="430" y="100">student_id — FOREIGN KEY</text>
-            <text x="430" y="124">course_id — FOREIGN KEY</text>
-            <text x="430" y="148">enrolled_at</text>
-            <text x="710" y="70" text-anchor="middle" font-weight="600">Courses</text>
-            <text x="710" y="100">id — PRIMARY KEY</text>
-            <text x="710" y="124">course_name</text>
-            <text x="710" y="148">instructor</text>
-            <text x="430" y="235" text-anchor="middle" opacity="0.65">Primary keys identify rows; foreign keys connect related tables.</text>
-          </g>
-        </svg>
-        <figcaption>A simple mental model of how relational tables connect through keys.</figcaption>
-      </figure>
+      <p>Read top to bottom — each level builds on the last. The course starts with tables and keys, then moves to filtering, aggregation, JOINs, and advanced queries.</p>
+      <p>The examples use small, readable tables so the focus stays on understanding what each SQL feature does and when to use it.</p>
     </section>
-    <section class="lesson" id="lesson-01">
-<p class="goal">Level 1 — database fundamentals and the basic SQL statements.</p>
-  <h2>Fundamentals</h2>
-  <p>We'll keep it <strong>simple, short, and practical</strong>.</p>
 
-  <p>Let's use one simple example throughout:</p>
-  <pre><code>Students
+    <section class="lesson" id="lesson-01">
+      <h2>01 — Tables, Keys &amp; Basic SQL</h2>
+      <p class="goal">Understand how relational data is organized and learn the basic SQL statements used to work with it.</p>
+
+      <p>Let's use one simple example throughout:</p>
+      <pre><code>Students
 +----+--------+-----+
 | id | name   | age |
 +----+--------+-----+
@@ -88,171 +57,107 @@
 | 3  | Reza   | 23  |
 +----+--------+-----+</code></pre>
 
-  <h3>1. Database</h3>
-  <p>A <strong>database</strong> is a collection of organized data.</p>
-  <p>Think of it as a container that holds multiple tables.</p>
-  <pre><code>University Database
-│
-├── Students
-├── Courses
-├── Professors
-└── Enrollments</code></pre>
+      <h3>1. Database</h3>
+      <p>A <strong>database</strong> is an organized collection of data. A database can contain many tables.</p>
 
-  <h3>2. Table</h3>
-  <p>A <strong>table</strong> stores data about one type of thing.</p>
-  <pre><code>Students
-Courses
-Employees
-Orders</code></pre>
-  <p>It's similar to a spreadsheet.</p>
+      <h3>2. Table</h3>
+      <p>A <strong>table</strong> stores data about one type of thing, such as students, employees, products, or orders.</p>
 
-  <h3>3. Row</h3>
-  <p>A <strong>row</strong> represents <strong>one record/entity</strong>.</p>
-  <pre><code>1 | Ali | 24</code></pre>
-  <p>This entire row represents one student.</p>
+      <h3>3. Row</h3>
+      <p>A <strong>row</strong> represents one record.</p>
+      <pre><code>1 | Ali | 24</code></pre>
 
-  <h3>4. Column</h3>
-  <p>A <strong>column</strong> represents <strong>one attribute/property</strong>.</p>
-  <pre><code>id
+      <h3>4. Column</h3>
+      <p>A <strong>column</strong> represents one attribute or property.</p>
+      <pre><code>id
 name
 age</code></pre>
-  <p>For example, <code>age</code> contains the age of every student.</p>
 
-  <h3>5. Primary Key</h3>
-  <p>A primary key <strong>uniquely identifies each row</strong>.</p>
-  <pre><code>id | name
+      <h3>5. Primary Key</h3>
+      <p>A <strong>primary key</strong> uniquely identifies each row in a table.</p>
+      <pre><code>id | name
 ---+-----
 1  | Ali
 2  | Sara
 3  | Reza</code></pre>
-  <p>Here <code>id</code> is the primary key.</p>
-  <p>Rules:</p>
-  <ul>
-    <li>Unique</li>
-    <li>Cannot be <code>NULL</code></li>
-    <li>Identifies one specific row</li>
-  </ul>
+      <p>A primary key is unique and cannot be <code>NULL</code>.</p>
 
-  <h3>6. Foreign Key</h3>
-  <p>A foreign key <strong>creates a relationship between tables</strong> by referencing a key in another table.</p>
-  <pre><code>Students
+      <h3>6. Foreign Key</h3>
+      <p>A <strong>foreign key</strong> is a column that references a key in another table. It is used to connect related data.</p>
+      <pre><code>Students
 id | name
 ---+-----
 1  | Ali
 2  | Sara</code></pre>
-  <pre><code>Courses
+      <pre><code>Courses
 id | course | student_id
 ---+--------+-----------
 1  | SQL    | 1
 2  | Python | 2</code></pre>
-  <p><code>Courses.student_id</code> is a foreign key referencing <code>Students.id</code>.</p>
-  <div class="note">So:<br><strong>Primary key → identifies</strong><br><strong>Foreign key → connects</strong></div>
+      <p>Here, <code>Courses.student_id</code> references <code>Students.id</code>.</p>
+      <div class="note"><strong>Primary key</strong> → identifies a row<br><strong>Foreign key</strong> → connects related rows</div>
 
-  <h3>7. NULL</h3>
-  <p><code>NULL</code> means <strong>no value / unknown value</strong>.</p>
-  <p>It is <strong>not</strong> the same as:</p>
-  <pre><code>0
-""</code></pre>
-  <pre><code>id | name | phone
----+------+------
-1  | Ali  | NULL</code></pre>
-  <p>Ali's phone number isn't known/provided.</p>
+      <h3>7. NULL</h3>
+      <p><code>NULL</code> means that a value is missing or unknown. It is not the same as <code>0</code> or an empty string.</p>
 
-  <h3>8. Data Types</h3>
-  <p>Every column has a type that determines what kind of data it stores.</p>
-  <p>Common ones:</p>
-  <pre><code>INT          -- integer
+      <h3>8. Data Types</h3>
+      <p>Columns have data types that define what kind of values they store.</p>
+      <pre><code>INT          -- integer
 VARCHAR      -- text
 DECIMAL      -- decimal number
 DATE         -- date
 BOOLEAN      -- true/false</code></pre>
-  <p>Example:</p>
-  <pre><code>CREATE TABLE Students (
-    id INT,
-    name VARCHAR(100),
-    age INT,
-    birth_date DATE
-);</code></pre>
 
-  <h3>9. CREATE TABLE</h3>
-  <p>Creates a new table.</p>
-  <pre><code>CREATE TABLE Students (
+      <h3>9. CREATE TABLE</h3>
+      <p>Creates a new table.</p>
+      <pre><code>CREATE TABLE Students (
     id INT PRIMARY KEY,
     name VARCHAR(100),
     age INT
 );</code></pre>
 
-  <h3>10. INSERT</h3>
-  <p>Adds new rows.</p>
-  <pre><code>INSERT INTO Students (id, name, age)
+      <h3>10. INSERT</h3>
+      <p>Adds new rows.</p>
+      <pre><code>INSERT INTO Students (id, name, age)
 VALUES (1, 'Ali', 24);</code></pre>
-  <p>You can insert multiple rows:</p>
-  <pre><code>INSERT INTO Students (id, name, age)
-VALUES
-(1, 'Ali', 24),
-(2, 'Sara', 25),
-(3, 'Reza', 23);</code></pre>
+      <p>You do not have to provide every column. If a column is omitted and has no default value, it will usually become <code>NULL</code> if NULL is allowed.</p>
+      <pre><code>INSERT INTO Students (id, name)
+VALUES (1, 'Ali');</code></pre>
 
-  <h3>11. SELECT</h3>
-  <p>Retrieves data.</p>
-  <pre><code>SELECT * FROM Students;</code></pre>
-  <p><code>*</code> means <strong>all columns</strong>.</p>
-  <p>Or:</p>
-  <pre><code>SELECT name, age
+      <h3>11. SELECT</h3>
+      <p><strong>SELECT</strong> retrieves data from a table.</p>
+      <pre><code>SELECT *
+FROM Students;</code></pre>
+      <p><code>*</code> means all columns. You can also choose specific columns:</p>
+      <pre><code>SELECT name, age
 FROM Students;</code></pre>
 
-  <h3>12. UPDATE</h3>
-  <p>Changes existing data.</p>
-  <pre><code>UPDATE Students
+      <h3>12. UPDATE</h3>
+      <p>Changes existing rows.</p>
+      <pre><code>UPDATE Students
 SET age = 25
 WHERE id = 1;</code></pre>
-  <p><strong>Important:</strong> <code>WHERE</code> is extremely important here. Without it, you could update <strong>every row</strong>.</p>
+      <p>Without <code>WHERE</code>, every row is updated:</p>
+      <pre><code>UPDATE Students
+SET age = 25;</code></pre>
 
-  <h3>13. DELETE</h3>
-  <p>Deletes rows.</p>
-  <pre><code>DELETE FROM Students
+      <h3>13. DELETE</h3>
+      <p>Deletes rows.</p>
+      <pre><code>DELETE FROM Students
 WHERE id = 1;</code></pre>
-  <p>Again, <code>WHERE</code> matters. Without it:</p>
-  <pre><code>DELETE FROM Students;</code></pre>
-  <p>you delete <strong>all rows</strong>.</p>
+      <p>Without <code>WHERE</code>, all rows are deleted.</p>
 
-  <h3>The most important thing to remember</h3>
-  <p>At this stage, think of SQL as:</p>
-  <div class="note"><strong>Database → Tables → Rows + Columns</strong></div>
-  <p>And the four basic operations are:</p>
-  <table>
-    <thead><tr><th>Operation</th><th>SQL</th></tr></thead>
-    <tbody>
-      <tr><td>Get data</td><td><code>SELECT</code></td></tr>
-      <tr><td>Add data</td><td><code>INSERT</code></td></tr>
-      <tr><td>Change data</td><td><code>UPDATE</code></td></tr>
-      <tr><td>Delete data</td><td><code>DELETE</code></td></tr>
-    </tbody>
-  </table>
-  <p>These four are the foundation of SQL.</p>
+      <h3>Key idea</h3>
+      <p>At this stage, think of SQL as:</p>
+      <div class="note"><strong>Database → Tables → Rows + Columns</strong><br><br><strong>SELECT</strong> → get data<br><strong>INSERT</strong> → add data<br><strong>UPDATE</strong> → change data<br><strong>DELETE</strong> → remove data</div>
+    </section>
 
-  <div class="note">
-    <strong>Useful clarification from our follow-up:</strong><br>
-    You can omit <code>age</code> when inserting a row:<br><br>
-    <code>INSERT INTO Students (id, name) VALUES (1, 'Ali');</code><br><br>
-    <code>age</code> will be <strong>NULL</strong>, assuming the column allows NULL values. If <code>age</code> has a <code>DEFAULT</code> value, that default value will be used.
-  </div>
-  <div class="note">
-    <strong>SELECT + WHERE:</strong><br>
-    <code>SELECT *</code> chooses the columns to return; <code>WHERE</code> chooses the rows.<br><br>
-    <code>SELECT * FROM Students WHERE name = 'Ali';</code>
-  </div>
-  <div class="note">
-    <strong>UPDATE without WHERE:</strong><br>
-    <code>UPDATE Students SET age = 25;</code> changes the age of <strong>every row</strong> to 25.
-  </div>
-</section>
     <section class="lesson" id="lesson-02">
-<p class="goal">Level 2 — querying, filtering, sorting, and inspecting data.</p>
-  <h2>Querying Data</h2>
-  <p>Now we get into the part of SQL you'll use <strong>constantly</strong> when working with data.</p>
-  <p>We'll keep using:</p>
-  <pre><code>Students
+      <h2>02 — Filtering, Sorting &amp; SELECT</h2>
+      <p class="goal">Learn how to choose the columns and rows you want, then sort and limit the result.</p>
+
+      <p>Use this table for the examples:</p>
+      <pre><code>Students
 +----+--------+-----+
 | id | name   | age |
 +----+--------+-----+
@@ -262,498 +167,371 @@ WHERE id = 1;</code></pre>
 | 4  | Mina   | 25  |
 +----+--------+-----+</code></pre>
 
-  <h3>1. SELECT</h3>
-  <p>We already saw this, but let's go one step further.</p>
-  <p>Get specific columns:</p>
-  <pre><code>SELECT name, age
+      <h3>1. SELECT — choose columns</h3>
+      <p><code>SELECT</code> chooses <strong>which columns</strong> you want in the result.</p>
+      <pre><code>SELECT name, age
 FROM Students;</code></pre>
-  <p>Get everything:</p>
-  <pre><code>SELECT *
-FROM Students;</code></pre>
+      <p>You can select all columns with <code>*</code>.</p>
 
-  <h3>2. WHERE</h3>
-  <p><strong>Filters rows</strong> based on a condition.</p>
-  <pre><code>SELECT *
+      <h3>2. WHERE — choose rows</h3>
+      <p><code>WHERE</code> filters <strong>which rows</strong> you want.</p>
+      <pre><code>SELECT *
 FROM Students
 WHERE age &gt; 24;</code></pre>
-  <p>Result:</p>
-  <pre><code>Sara | 25
-Mina | 25</code></pre>
-  <div class="note">Think:<br><code>WHERE</code> = <strong>Which rows do I want?</strong></div>
-  <p>Common operators:</p>
-  <pre><code>=       -- equal
-!=      -- not equal
-&gt;       -- greater than
-&lt;       -- less than
-&gt;=      -- greater than or equal
-&lt;=      -- less than or equal</code></pre>
+      <p>This returns Sara and Mina.</p>
+      <p>So:</p>
+      <div class="note"><code>SELECT</code> → Which columns?<br><code>WHERE</code> → Which rows?</div>
+      <p>To find Ali's row:</p>
+      <pre><code>SELECT *
+FROM Students
+WHERE name = 'Ali';</code></pre>
+      <p>To get only Ali's age:</p>
+      <pre><code>SELECT age
+FROM Students
+WHERE name = 'Ali';</code></pre>
 
-  <h3>3. AND</h3>
-  <p>Both conditions must be true.</p>
-  <pre><code>SELECT *
+      <h3>3. AND</h3>
+      <p><code>AND</code> requires both conditions to be true.</p>
+      <pre><code>SELECT *
 FROM Students
 WHERE age &gt; 23 AND age &lt; 26;</code></pre>
 
-  <h3>4. OR</h3>
-  <p>At least one condition must be true.</p>
-  <pre><code>SELECT *
+      <h3>4. OR</h3>
+      <p><code>OR</code> requires at least one condition to be true.</p>
+      <pre><code>SELECT *
 FROM Students
 WHERE age = 23 OR age = 25;</code></pre>
 
-  <h3>5. NOT</h3>
-  <p>Reverses a condition.</p>
-  <pre><code>SELECT *
+      <h3>5. NOT</h3>
+      <p><code>NOT</code> reverses a condition.</p>
+      <pre><code>SELECT *
 FROM Students
 WHERE NOT age = 25;</code></pre>
-  <p>This gives students whose age is <strong>not 25</strong>.</p>
 
-  <h3>6. IN</h3>
-  <p>Useful when you want to check multiple possible values.</p>
-  <p>Instead of:</p>
-  <pre><code>WHERE age = 23 OR age = 25</code></pre>
-  <p>you can write:</p>
-  <pre><code>WHERE age IN (23, 25);</code></pre>
-  <p>Much cleaner.</p>
+      <h3>6. IN</h3>
+      <p><code>IN</code> checks whether a value is one of several values.</p>
+      <pre><code>SELECT *
+FROM Students
+WHERE age IN (23, 25);</code></pre>
+      <p>It is a shorter version of multiple <code>OR</code> conditions.</p>
 
-  <h3>7. BETWEEN</h3>
-  <p>Checks whether a value is within a range.</p>
-  <pre><code>SELECT *
+      <h3>7. BETWEEN</h3>
+      <p><code>BETWEEN</code> checks whether a value is inside a range. The two endpoints are included.</p>
+      <pre><code>SELECT *
 FROM Students
 WHERE age BETWEEN 23 AND 25;</code></pre>
-  <p>This includes <strong>23 and 25</strong>.</p>
 
-  <h3>8. LIKE</h3>
-  <p>Used for <strong>pattern matching</strong>, mainly with text.</p>
-  <pre><code>SELECT *
+      <h3>8. LIKE</h3>
+      <p><code>LIKE</code> is used for text patterns. <code>%</code> means any number of characters.</p>
+      <pre><code>SELECT *
 FROM Students
 WHERE name LIKE 'A%';</code></pre>
-  <p><code>%</code> means <strong>any number of characters</strong>.</p>
-  <p>So this finds names starting with <code>A</code>:</p>
-  <pre><code>Ali
-Ahmad
-Amir</code></pre>
-  <p>Another example:</p>
-  <pre><code>WHERE name LIKE '%a'</code></pre>
-  <p>Names ending in <code>a</code>.</p>
+      <p>This finds names that start with <code>A</code>.</p>
 
-  <h3>9. IS NULL</h3>
-  <p>You <strong>cannot</strong> check NULL using:</p>
-  <pre><code>WHERE age = NULL  -- WRONG</code></pre>
-  <p>Instead:</p>
-  <pre><code>WHERE age IS NULL;</code></pre>
-  <p>Or:</p>
-  <pre><code>WHERE age IS NOT NULL;</code></pre>
+      <h3>9. IS NULL</h3>
+      <p>Use <code>IS NULL</code> or <code>IS NOT NULL</code> to check for missing values.</p>
+      <pre><code>SELECT *
+FROM Students
+WHERE age IS NULL;</code></pre>
+      <p><code>WHERE age = NULL</code> is not the correct way to test for NULL.</p>
 
-  <h3>10. ORDER BY</h3>
-  <p>Sorts your results.</p>
-  <p>Ascending:</p>
-  <pre><code>SELECT *
+      <h3>10. ORDER BY</h3>
+      <p><code>ORDER BY</code> sorts the result.</p>
+      <pre><code>SELECT *
 FROM Students
 ORDER BY age ASC;</code></pre>
-  <p>Descending:</p>
-  <pre><code>SELECT *
-FROM Students
-ORDER BY age DESC;</code></pre>
-  <p><code>ASC</code> = smallest → largest<br><code>DESC</code> = largest → smallest</p>
-  <p><code>ASC</code> is the default, so this is also valid:</p>
-  <pre><code>ORDER BY age;</code></pre>
+      <p><code>ASC</code> means smallest to largest. <code>DESC</code> means largest to smallest.</p>
 
-  <h3>11. LIMIT</h3>
-  <p>Controls how many rows you get back.</p>
-  <pre><code>SELECT *
+      <h3>11. LIMIT</h3>
+      <p><code>LIMIT</code> controls how many rows are returned. Support and syntax can vary by database system.</p>
+      <pre><code>SELECT *
 FROM Students
 LIMIT 2;</code></pre>
-  <p>Returns only 2 rows.</p>
-  <p>Very useful when you just want to inspect a small sample of a large table.</p>
 
-  <h3>12. DISTINCT</h3>
-  <p>Removes duplicate values.</p>
-  <p>Without <code>DISTINCT</code>:</p>
-  <pre><code>SELECT age
+      <h3>12. DISTINCT</h3>
+      <p><code>DISTINCT</code> removes duplicate results.</p>
+      <pre><code>SELECT DISTINCT age
 FROM Students;</code></pre>
-  <pre><code>24
-25
-23
-25</code></pre>
-  <p>With:</p>
-  <pre><code>SELECT DISTINCT age
-FROM Students;</code></pre>
-  <pre><code>23
-24
-25</code></pre>
 
-  <h3>The important mental model</h3>
-  <p>A very common SQL query looks like this:</p>
-  <pre><code>SELECT name, age
+      <h3>Putting it together</h3>
+      <pre><code>SELECT name, age
 FROM Students
 WHERE age &gt;= 24
 ORDER BY age DESC
 LIMIT 2;</code></pre>
-  <p>Read it almost like English:</p>
-  <div class="note"><strong>SELECT</strong> name and age<br><strong>FROM</strong> Students<br><strong>WHERE</strong> age is at least 24<br><strong>ORDER BY</strong> age from highest to lowest<br><strong>LIMIT</strong> the result to 2 rows.</div>
+      <p>Read it as: choose <code>name</code> and <code>age</code> → keep rows with age at least 24 → sort by age from high to low → return the first 2 rows.</p>
 
-  <h3>Level 2 checklist</h3>
-  <div class="checklist">
-    <div><code>SELECT</code></div>
-    <div><code>FROM</code></div>
-    <div><code>WHERE</code></div>
-    <div><code>AND</code></div>
-    <div><code>OR</code></div>
-    <div><code>NOT</code></div>
-    <div><code>IN</code></div>
-    <div><code>BETWEEN</code></div>
-    <div><code>LIKE</code></div>
-    <div><code>IS NULL</code></div>
-    <div><code>ORDER BY</code></div>
-    <div><code>LIMIT</code></div>
-    <div><code>DISTINCT</code></div>
-  </div>
+      <h3>Query building blocks</h3>
+      <div class="note"><strong>SELECT</strong> → choose columns<br><strong>FROM</strong> → choose the table<br><strong>WHERE</strong> → filter rows<br><strong>ORDER BY</strong> → sort rows<br><strong>LIMIT</strong> → limit the result</div>
+    </section>
 
-  <div class="note">
-    <strong>Useful distinction:</strong><br>
-    SQL statements/commands include <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>CREATE</code>, <code>ALTER</code>, and <code>DROP</code>.<br><br>
-    Clauses/operators commonly used inside statements include <code>FROM</code>, <code>WHERE</code>, <code>ORDER BY</code>, <code>LIMIT</code>, <code>GROUP BY</code>, <code>HAVING</code>, <code>JOIN</code>, <code>AND</code>, <code>OR</code>, <code>IN</code>, <code>LIKE</code>, and <code>BETWEEN</code>.
-  </div>
-</section>
     <section class="lesson" id="lesson-03">
-<p class="goal">Level 3 — aggregation, grouping, and filtering aggregated results.</p>
-  <h2>Aggregation &amp; Grouping</h2>
-  <p>This level teaches you how to turn many rows into useful summaries. These techniques are <strong>very important for data analysis</strong>.</p>
+      <h2>03 — Aggregation &amp; GROUP BY</h2>
+      <p class="goal">Learn how to summarize many rows with COUNT, SUM, AVG, MIN, MAX, GROUP BY, and HAVING.</p>
 
-  <h3>1. COUNT()</h3>
-  <p>Counts rows or non-NULL values.</p>
-  <pre><code>SELECT COUNT(*)
-FROM Students;</code></pre>
-  <p>Counts all rows.</p>
-  <p>You can also count a specific column:</p>
-  <pre><code>SELECT COUNT(age)
-FROM Students;</code></pre>
-  <p>This counts non-NULL values in <code>age</code>.</p>
+      <p>Aggregation turns many rows into useful summary values.</p>
 
-  <h3>2. SUM()</h3>
-  <p>Adds numeric values.</p>
-  <pre><code>SELECT SUM(age)
+      <h3>1. COUNT()</h3>
+      <p><code>COUNT(*)</code> counts rows.</p>
+      <pre><code>SELECT COUNT(*)
 FROM Students;</code></pre>
-  <p>In real datasets, you will use this for things such as revenue, quantities, costs, and scores.</p>
+      <p><code>COUNT(column)</code> counts non-NULL values in that column.</p>
 
-  <h3>3. AVG()</h3>
-  <p>Calculates the average.</p>
-  <pre><code>SELECT AVG(age)
+      <h3>2. SUM()</h3>
+      <p><code>SUM()</code> adds numeric values.</p>
+      <pre><code>SELECT SUM(age)
+FROM Students;</code></pre>
+      <p>In real datasets, this is useful for values such as revenue, quantity, cost, or score.</p>
+
+      <h3>3. AVG()</h3>
+      <p><code>AVG()</code> calculates the average.</p>
+      <pre><code>SELECT AVG(age)
 FROM Students;</code></pre>
 
-  <h3>4. MIN() and MAX()</h3>
-  <p>Find the smallest and largest values.</p>
-  <pre><code>SELECT MIN(age), MAX(age)
+      <h3>4. MIN() and MAX()</h3>
+      <p><code>MIN()</code> finds the smallest value and <code>MAX()</code> finds the largest.</p>
+      <pre><code>SELECT MIN(age), MAX(age)
 FROM Students;</code></pre>
 
-  <h3>5. GROUP BY</h3>
-  <p>Groups rows that have the same value so you can calculate something for each group.</p>
-  <p>Suppose we have:</p>
-  <pre><code>Students
-id | name | age
----+------+----
-1  | Ali  | 24
-2  | Sara | 25
-3  | Reza | 23
-4  | Mina | 25</code></pre>
-  <p>Count students for each age:</p>
-  <pre><code>SELECT age, COUNT(*)
+      <h3>5. GROUP BY — make groups</h3>
+      <p><code>GROUP BY</code> puts rows with the same value into groups so you can calculate something for each group.</p>
+      <p>For example, count students for each age:</p>
+      <pre><code>SELECT age, COUNT(*)
 FROM Students
 GROUP BY age;</code></pre>
-  <p>Result:</p>
-  <pre><code>23 | 1
+      <p>The result is:</p>
+      <pre><code>23 | 1
 24 | 1
 25 | 2</code></pre>
-  <div class="note"><code>GROUP BY</code> = <strong>make groups, then calculate something for each group.</strong></div>
+      <div class="note"><code>GROUP BY</code> → make groups, then calculate something for each group.</div>
 
-  <h3>6. HAVING</h3>
-  <p><code>HAVING</code> filters <strong>groups</strong> after <code>GROUP BY</code>.</p>
-  <pre><code>SELECT age, COUNT(*)
+      <h3>6. WHERE vs HAVING</h3>
+      <p><code>WHERE</code> filters <strong>individual rows before grouping</strong>.</p>
+      <p><code>HAVING</code> filters <strong>groups after grouping</strong>.</p>
+      <pre><code>SELECT age, COUNT(*)
 FROM Students
+WHERE age &gt; 23
 GROUP BY age
 HAVING COUNT(*) &gt; 1;</code></pre>
-  <p>This returns only age groups that contain more than one student.</p>
+      <p>The order is:</p>
+      <div class="note"><strong>WHERE → GROUP BY → HAVING</strong><br><br><code>WHERE</code> = filter rows<br><code>GROUP BY</code> = create groups<br><code>HAVING</code> = filter groups</div>
+      <p>You cannot put <code>WHERE</code> after <code>GROUP BY</code> in standard SQL.</p>
 
-  <h3>WHERE vs HAVING</h3>
-  <p>This distinction is extremely important:</p>
-  <table>
-    <thead><tr><th>Clause</th><th>What it filters</th></tr></thead>
-    <tbody>
-      <tr><td><code>WHERE</code></td><td>Individual rows</td></tr>
-      <tr><td><code>HAVING</code></td><td>Groups</td></tr>
-    </tbody>
-  </table>
-
-  <h3>7. Aliases with AS</h3>
-  <p>Use <code>AS</code> to give a column or calculation a clearer name.</p>
-  <pre><code>SELECT AVG(age) AS average_age
+      <h3>7. Aliases with AS</h3>
+      <p><code>AS</code> gives a column or calculation a clearer name.</p>
+      <pre><code>SELECT AVG(age) AS average_age
 FROM Students;</code></pre>
 
-  <h3>The important mental model</h3>
-  <pre><code>SELECT age, COUNT(*) AS student_count
-FROM Students
-WHERE age &gt;= 23
-GROUP BY age
-HAVING COUNT(*) &gt; 1
-ORDER BY student_count DESC;</code></pre>
-  <div class="note">
-    Think:<br>
-    <strong>WHERE → filter rows</strong><br>
-    <strong>GROUP BY → make groups</strong><br>
-    <strong>COUNT/SUM/AVG/MIN/MAX → calculate</strong><br>
-    <strong>HAVING → filter groups</strong><br>
-    <strong>ORDER BY → sort the final result</strong>
-  </div>
+      <h3>Common query order</h3>
+      <pre><code>SELECT
+FROM
+WHERE
+GROUP BY
+HAVING
+ORDER BY
+LIMIT</code></pre>
+      <p>This is the order you normally write these clauses in a SQL query.</p>
+    </section>
 
-  <h3>Level 3 checklist</h3>
-  <div class="checklist">
-    <div><code>COUNT()</code></div>
-    <div><code>SUM()</code></div>
-    <div><code>AVG()</code></div>
-    <div><code>MIN()</code></div>
-    <div><code>MAX()</code></div>
-    <div><code>GROUP BY</code></div>
-    <div><code>HAVING</code></div>
-    <div><code>AS</code> (aliases)</div>
-  </div>
-</section>
     <section class="lesson" id="lesson-04">
-<p class="goal">Level 4 — combining related tables and writing multi-table queries.</p>
-  <h2>JOINs &amp; Multi-Table SQL</h2>
-  <p>This level teaches you how to work with <strong>multiple related tables</strong>. JOINs are one of the most important SQL skills for working with relational data.</p>
+      <h2>04 — Combining Tables with JOINs</h2>
+      <p class="goal">Understand how JOINs connect related tables and when to use INNER, LEFT, RIGHT, and FULL OUTER JOIN.</p>
 
-  <p>Suppose we have:</p>
-  <pre><code>Students
+      <p>Suppose we have two tables:</p>
+      <pre><code>Students
 id | name
 ---+-----
 1  | Ali
 2  | Sara
 3  | Reza</code></pre>
-  <pre><code>Courses
+      <pre><code>Courses
 id | course | student_id
 ---+--------+-----------
 1  | SQL    | 1
 2  | Python | 2
-3  | ML     | 1</code></pre>
+3  | ML     | 4</code></pre>
+      <p><code>Courses.student_id</code> points to <code>Students.id</code>.</p>
 
-  <h3>1. INNER JOIN</h3>
-  <p><code>INNER JOIN</code> keeps <strong>only the rows that have a match in both tables</strong>.</p>
-  <p>In our example, <code>Students.id</code> matches <code>Courses.student_id</code>. So Ali and Sara appear because they have courses. Reza does not appear because there is no course with <code>student_id = 3</code>.</p>
-  <pre><code>SELECT Students.name, Courses.course
+      <h3>1. What is a JOIN?</h3>
+      <p>A <strong>JOIN</strong> combines rows from two tables when a related value matches.</p>
+      <p>The <code>ON</code> condition tells SQL how the tables are related.</p>
+      <pre><code>SELECT Students.name, Courses.course
+FROM Students
+JOIN Courses
+    ON Students.id = Courses.student_id;</code></pre>
+
+      <h3>Question — What is a JOIN?</h3>
+      <p>Write a JOIN that returns each student's name together with their course.</p>
+
+      <h3>2. INNER JOIN — only matching rows</h3>
+      <p><code>INNER JOIN</code> returns only rows that have a match in <strong>both</strong> tables.</p>
+      <pre><code>SELECT Students.name, Courses.course
 FROM Students
 INNER JOIN Courses
     ON Students.id = Courses.student_id;</code></pre>
-  <p>Result:</p>
-  <pre><code>Ali  | SQL
-Sara | Python
-Ali  | ML</code></pre>
-  <div class="note"><strong>Think:</strong> "Give me only the records that exist on both sides."</div>
+      <p>Here, Ali and Sara are returned because their IDs match. The course with <code>student_id = 4</code> is not returned because student 4 does not exist in <code>Students</code>.</p>
 
-  <h3>Question — INNER JOIN</h3>
-  <p>Using the <code>Students</code> and <code>Courses</code> tables above, write a query that returns the student's name and the course name, but only for students who have at least one course.</p>
+      <h3>Question — INNER JOIN</h3>
+      <p>Write a query that returns only students who have a matching course.</p>
 
-  <h3>2. LEFT JOIN</h3>
-  <p><code>LEFT JOIN</code> keeps <strong>every row from the left table</strong>, even when there is no match in the right table.</p>
-  <p>Here, <code>Students</code> is the left table. Therefore, Reza will still appear. Because he has no matching course, the course value will be <code>NULL</code>.</p>
-  <pre><code>SELECT Students.name, Courses.course
+      <h3>3. LEFT JOIN — keep all rows from the left table</h3>
+      <p><code>LEFT JOIN</code> keeps <strong>every row from the left table</strong>. If there is no match in the right table, the right-side columns become <code>NULL</code>.</p>
+      <pre><code>SELECT Students.name, Courses.course
 FROM Students
 LEFT JOIN Courses
     ON Students.id = Courses.student_id;</code></pre>
-  <p>Result:</p>
-  <pre><code>Ali  | SQL
-Sara | Python
-Ali  | ML
-Reza | NULL</code></pre>
-  <div class="note"><strong>Think:</strong> "Keep everything from the left table, and add matching information from the right."</div>
+      <p>Reza is included even though Reza has no matching course, so the course value is <code>NULL</code>.</p>
 
-  <h3>Question — LEFT JOIN</h3>
-  <p>Using the same tables, write a query that shows <strong>every student</strong> and their course name. Students without a course must still appear.</p>
+      <h3>Question — LEFT JOIN</h3>
+      <p>Write a query that returns every student, including students who have not taken any course.</p>
 
-  <h3>3. RIGHT JOIN</h3>
-  <p><code>RIGHT JOIN</code> is the mirror image of <code>LEFT JOIN</code>. It keeps <strong>every row from the right table</strong>, even when there is no match in the left table.</p>
-  <p>If we write <code>Courses RIGHT JOIN Students</code>, every student is preserved. If we write <code>Students RIGHT JOIN Courses</code>, every course is preserved.</p>
-  <pre><code>SELECT Students.name, Courses.course
+      <h3>4. RIGHT JOIN — keep all rows from the right table</h3>
+      <p><code>RIGHT JOIN</code> is the opposite of <code>LEFT JOIN</code>: it keeps <strong>every row from the right table</strong>, even when there is no match in the left table.</p>
+      <pre><code>SELECT Students.name, Courses.course
 FROM Students
 RIGHT JOIN Courses
     ON Students.id = Courses.student_id;</code></pre>
-  <div class="note"><strong>Think:</strong> "Keep everything from the right table, and add matching information from the left."</div>
+      <p>Here, the course with <code>student_id = 4</code> is kept, but the student's name is <code>NULL</code> because student 4 is missing.</p>
+      <p>Some database systems do not support <code>RIGHT JOIN</code>. In those systems, the same result can usually be written with the tables reversed and a <code>LEFT JOIN</code>.</p>
 
-  <h3>Question — RIGHT JOIN</h3>
-  <p>Using <code>Students</code> and <code>Courses</code>, write a query that keeps <strong>every course</strong> even if its student record does not exist.</p>
+      <h3>Question — RIGHT JOIN</h3>
+      <p>Write a query that keeps every course, even when a course has no matching student.</p>
 
-  <h3>4. FULL OUTER JOIN</h3>
-  <p><code>FULL OUTER JOIN</code> keeps <strong>all rows from both tables</strong>. Matching rows are combined; unmatched rows from either table are also kept, with <code>NULL</code> on the missing side.</p>
-  <p>So it is essentially: "Keep everything from the left <strong>and</strong> everything from the right."</p>
-  <pre><code>SELECT Students.name, Courses.course
+      <h3>5. FULL OUTER JOIN — keep everything</h3>
+      <p><code>FULL OUTER JOIN</code> keeps all rows from <strong>both</strong> tables. Matching rows are combined; unmatched rows appear with <code>NULL</code> on the missing side.</p>
+      <pre><code>SELECT Students.name, Courses.course
 FROM Students
 FULL OUTER JOIN Courses
     ON Students.id = Courses.student_id;</code></pre>
-  <p><strong>Note:</strong> Some database systems, including MySQL, do not support <code>FULL OUTER JOIN</code> directly. The concept is still important, and it can be reproduced with other techniques.</p>
+      <p>This keeps Reza even without a course and also keeps the course whose student does not exist.</p>
+      <p>Support for <code>FULL OUTER JOIN</code> depends on the database system.</p>
 
-  <h3>Question — FULL OUTER JOIN</h3>
-  <p>Imagine the <code>Students</code> table contains a student with no course, while the <code>Courses</code> table contains a course whose <code>student_id</code> does not exist in <code>Students</code>. Write a query that keeps <strong>both unmatched records</strong> as well as all matches.</p>
+      <h3>Question — FULL OUTER JOIN</h3>
+      <p>Write a query that keeps every student and every course, whether or not they match.</p>
 
-  <h3>5. JOIN with WHERE</h3>
-  <p>You can join two tables and then filter the resulting rows with <code>WHERE</code>.</p>
-  <pre><code>SELECT Students.name, Courses.course
+      <h3>6. JOIN with WHERE</h3>
+      <p>You can join tables and then filter the joined rows with <code>WHERE</code>.</p>
+      <pre><code>SELECT Students.name, Courses.course
 FROM Students
 INNER JOIN Courses
     ON Students.id = Courses.student_id
 WHERE Students.name = 'Ali';</code></pre>
-  <p>The JOIN decides <strong>which rows can be connected</strong>; <code>WHERE</code> then decides <strong>which of those joined rows you want to keep</strong>.</p>
+      <p>The JOIN decides which rows can be connected. <code>WHERE</code> then filters those joined rows.</p>
 
-  <h3>Question — JOIN with WHERE</h3>
-  <p>Write a query that joins students with their courses and returns <strong>only Sara's courses</strong>.</p>
+      <h3>Question — JOIN with WHERE</h3>
+      <p>Write a query that joins students with their courses and returns only Sara's courses.</p>
 
-  <h3>6. Table aliases</h3>
-  <p>A table alias gives a table a short temporary name inside a query. This makes JOINs shorter and easier to read.</p>
-  <pre><code>SELECT s.name, c.course
+      <h3>7. Table aliases</h3>
+      <p>A <strong>table alias</strong> gives a table a short temporary name inside the query. This makes JOINs easier to read.</p>
+      <pre><code>SELECT s.name, c.course
 FROM Students AS s
 JOIN Courses AS c
     ON s.id = c.student_id;</code></pre>
-  <p>Here, <code>s</code> means <code>Students</code> and <code>c</code> means <code>Courses</code>.</p>
-  <p><code>AS</code> is optional, so <code>Students s</code> is also valid.</p>
+      <p>Here, <code>s</code> means <code>Students</code> and <code>c</code> means <code>Courses</code>.</p>
+      <p><code>AS</code> is optional, so <code>Students s</code> is also valid.</p>
 
-  <h3>Question — Table aliases</h3>
-  <p>Rewrite an INNER JOIN between <code>Students</code> and <code>Courses</code> using the aliases <code>s</code> and <code>c</code>.</p>
+      <h3>Question — Table aliases</h3>
+      <p>Rewrite an INNER JOIN between <code>Students</code> and <code>Courses</code> using the aliases <code>s</code> and <code>c</code>.</p>
 
-  <h3>7. Joining more than two tables</h3>
-  <p>You are not limited to two tables. You can keep adding JOINs when your data is split across several related tables.</p>
-  <p>For example, suppose <code>Courses</code> also has a <code>professor_id</code> that references <code>Professors.id</code>.</p>
-  <pre><code>SELECT s.name, c.course, p.name AS professor
+      <h3>8. Joining more than two tables</h3>
+      <p>You can keep adding JOINs when your data is spread across several related tables.</p>
+      <pre><code>SELECT s.name, c.course, p.name AS professor
 FROM Students AS s
 JOIN Courses AS c
     ON s.id = c.student_id
 JOIN Professors AS p
     ON c.professor_id = p.id;</code></pre>
-  <p>Now the query connects three tables: <code>Students → Courses → Professors</code>.</p>
 
-  <h3>Question — Joining more than two tables</h3>
-  <p>Assume <code>Courses</code> has <code>professor_id</code> and <code>Professors</code> has <code>id</code> and <code>name</code>. Write a query that returns the <strong>student name, course name, and professor name</strong>.</p>
+      <h3>Question — Joining more than two tables</h3>
+      <p>Write a query that returns the student's name, course name, and professor name from three related tables.</p>
 
-  <h3>8. The most important JOIN idea</h3>
-  <div class="note"><strong>JOIN connects related tables using a matching key.</strong><br><br>Usually this means a foreign key in one table matches a primary key in another table.<br><br><strong>INNER JOIN</strong> → only matches<br><strong>LEFT JOIN</strong> → everything from the left<br><strong>RIGHT JOIN</strong> → everything from the right<br><strong>FULL OUTER JOIN</strong> → everything from both</div>
+      <h3>Core JOIN idea</h3>
+      <div class="note"><code>INNER JOIN</code> → matching rows only<br><code>LEFT JOIN</code> → all left rows + matches<br><code>RIGHT JOIN</code> → all right rows + matches<br><code>FULL OUTER JOIN</code> → all rows from both tables</div>
+    </section>
 
-  <h3>JOIN checklist</h3>
-  <div class="checklist">
-    <div><code>INNER JOIN</code></div>
-    <div><code>LEFT JOIN</code></div>
-    <div><code>RIGHT JOIN</code></div>
-    <div><code>FULL OUTER JOIN</code></div>
-    <div><code>ON</code></div>
-    <div>Table aliases</div>
-    <div>Joining multiple tables</div>
-  </div>
-</section>
     <section class="lesson" id="lesson-05">
-<p class="goal">Level 5 — advanced SQL patterns for analysis and reusable queries.</p>
-  <h2>Advanced SQL</h2>
-  <p>This level covers the SQL features that move you from basic querying toward <strong>more advanced SQL</strong>.</p>
+      <h2>05 — Advanced Queries: CTEs &amp; Windows</h2>
+      <p class="goal">Learn a small set of advanced SQL features that make real-world queries easier to read and more powerful.</p>
 
-  <h3>1. CASE</h3>
-  <p><code>CASE</code> lets you create conditional logic inside a query.</p>
-  <pre><code>SELECT name,
-       age,
-       CASE
-           WHEN age &lt; 25 THEN 'Young'
-           ELSE '25 or older'
-       END AS age_group
+      <h3>1. CASE — add logic inside a query</h3>
+      <p><code>CASE</code> works like an <strong>if/else</strong> expression.</p>
+      <pre><code>SELECT name, age,
+    CASE
+        WHEN age &gt;= 25 THEN '25 or older'
+        ELSE 'Under 25'
+    END AS age_group
 FROM Students;</code></pre>
-  <p>Think of it as SQL's version of <strong>if / elif / else</strong>.</p>
 
-  <h3>2. COALESCE</h3>
-  <p><code>COALESCE</code> returns the first non-NULL value.</p>
-  <pre><code>SELECT name,
-       COALESCE(phone, 'Not provided') AS phone
+      <h3>2. COALESCE — use a fallback value</h3>
+      <p><code>COALESCE</code> returns the first non-NULL value.</p>
+      <pre><code>SELECT name,
+    COALESCE(phone, 'No phone') AS phone
 FROM Students;</code></pre>
-  <p>This is useful when you want a fallback value instead of <code>NULL</code>.</p>
+      <p>This is useful when you want to replace missing values in a result.</p>
 
-  <h3>3. Subqueries</h3>
-  <p>A subquery is a query inside another query.</p>
-  <pre><code>SELECT name, age
+      <h3>3. Subqueries — query inside a query</h3>
+      <p>A <strong>subquery</strong> is a query nested inside another query.</p>
+      <pre><code>SELECT name, age
 FROM Students
 WHERE age &gt; (
     SELECT AVG(age)
     FROM Students
 );</code></pre>
-  <p>This finds students whose age is above the average age.</p>
+      <p>The inner query calculates the average age. The outer query returns students older than that average.</p>
 
-  <h3>4. CTEs — WITH</h3>
-  <p>A Common Table Expression (CTE) gives a temporary name to a query so the main query is easier to read.</p>
-  <pre><code>WITH average_age AS (
+      <h3>4. CTEs with WITH — make complex queries clearer</h3>
+      <p>A <strong>CTE</strong> (Common Table Expression) gives a temporary result a name so the main query is easier to read.</p>
+      <pre><code>WITH average_age AS (
     SELECT AVG(age) AS avg_age
     FROM Students
 )
 SELECT name, age
 FROM Students, average_age
-WHERE age &gt; average_age.avg_age;</code></pre>
-  <div class="note"><code>WITH</code> is especially useful when a query becomes long or has multiple logical steps.</div>
+WHERE age &gt; avg_age;</code></pre>
+      <p>A CTE is especially useful when a query has multiple steps.</p>
 
-  <h3>5. Window Functions</h3>
-  <p>Window functions calculate across related rows <strong>without collapsing the rows into groups</strong>.</p>
-  <p>Common window functions include:</p>
-  <pre><code>ROW_NUMBER()
-RANK()
-LAG()
-LEAD()</code></pre>
+      <h3>5. Window Functions — calculate without collapsing rows</h3>
+      <p>A <strong>window function</strong> performs a calculation across related rows while keeping the original rows in the result.</p>
+      <p>This is the key difference from <code>GROUP BY</code>: <code>GROUP BY</code> combines rows into groups, while a window function keeps each row.</p>
 
-  <h3>6. ROW_NUMBER()</h3>
-  <p>Assigns a sequential number to rows.</p>
-  <pre><code>SELECT name,
-       age,
-       ROW_NUMBER() OVER (ORDER BY age DESC) AS row_num
+      <h3>6. ROW_NUMBER()</h3>
+      <p>Assigns a unique row number to each row in the result.</p>
+      <pre><code>SELECT name, age,
+    ROW_NUMBER() OVER (ORDER BY age DESC) AS row_num
 FROM Students;</code></pre>
 
-  <h3>7. RANK()</h3>
-  <p>Ranks rows based on a value. Tied values receive the same rank.</p>
-  <pre><code>SELECT name,
-       age,
-       RANK() OVER (ORDER BY age DESC) AS age_rank
+      <h3>7. RANK()</h3>
+      <p>Ranks rows based on a value. Ties receive the same rank.</p>
+      <pre><code>SELECT name, age,
+    RANK() OVER (ORDER BY age DESC) AS age_rank
 FROM Students;</code></pre>
 
-  <h3>8. LAG() and LEAD()</h3>
-  <p>These let you access a previous or next row without joining the table to itself.</p>
-  <pre><code>SELECT name,
-       age,
-       LAG(age) OVER (ORDER BY id) AS previous_age,
-       LEAD(age) OVER (ORDER BY id) AS next_age
+      <h3>8. LAG() and LEAD()</h3>
+      <p><code>LAG()</code> looks at a previous row. <code>LEAD()</code> looks at a following row.</p>
+      <pre><code>SELECT name, age,
+    LAG(age) OVER (ORDER BY id) AS previous_age,
+    LEAD(age) OVER (ORDER BY id) AS next_age
 FROM Students;</code></pre>
 
-  <h3>9. Combining advanced features</h3>
-  <p>A realistic analytical query can combine CTEs, JOINs, aggregation, filtering, and window functions.</p>
-  <pre><code>WITH course_counts AS (
-    SELECT student_id, COUNT(*) AS course_count
-    FROM Courses
-    GROUP BY student_id
+      <h3>9. A practical multi-step query</h3>
+      <p>These features can be combined. For example, first create a result with a CTE, then rank the rows.</p>
+      <pre><code>WITH student_scores AS (
+    SELECT name, age
+    FROM Students
 )
-SELECT s.name,
-       c.course_count,
-       RANK() OVER (ORDER BY c.course_count DESC) AS rank
-FROM Students AS s
-JOIN course_counts AS c
-    ON s.id = c.student_id
-ORDER BY rank;</code></pre>
+SELECT name, age,
+    RANK() OVER (ORDER BY age DESC) AS age_rank
+FROM student_scores;</code></pre>
 
-  <h3>Level 5 checklist</h3>
-  <div class="checklist">
-    <div><code>CASE</code></div>
-    <div><code>COALESCE</code></div>
-    <div>Subqueries</div>
-    <div>CTEs / <code>WITH</code></div>
-    <div>Window functions</div>
-    <div><code>ROW_NUMBER()</code></div>
-    <div><code>RANK()</code></div>
-    <div><code>LAG()</code></div>
-    <div><code>LEAD()</code></div>
-  </div>
+      <h3>Core idea</h3>
+      <div class="note"><code>CASE</code> → add conditions<br><code>COALESCE</code> → handle NULL values<br><code>Subquery</code> → query inside a query<br><code>CTE</code> → name an intermediate result<br><code>Window function</code> → calculate across rows without removing them</div>
 
-  <h3>Level 5 takeaway</h3>
-  <div class="final-target">
-    <p>After this level, you can use SQL not only to retrieve and summarize data, but also to write structured analytical queries using subqueries, CTEs, and window functions.</p>
-  </div>
-</section>
+      <h3>What to remember from the whole course</h3>
+      <div class="note"><strong>Level 1:</strong> understand tables and basic SQL statements.<br><strong>Level 2:</strong> select, filter, sort, and limit data.<br><strong>Level 3:</strong> summarize and group data.<br><strong>Level 4:</strong> combine related tables.<br><strong>Level 5:</strong> write more advanced, readable analytical queries.</div>
+    </section>
+
     <footer>
-      <p>Developed by <a href="https://soroushesnaashari.github.io/">Soroush</a></p>
+      <p>SQL — A Crash Course</p>
     </footer>
   </main>
 </body>
