@@ -15,16 +15,22 @@ document.addEventListener("DOMContentLoaded", function () {
       var done = function () {
         btn.textContent = "Copied!";
         btn.classList.add("copied");
-        setTimeout(function () { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1600);
+        setTimeout(function () {
+          btn.textContent = "Copy";
+          btn.classList.remove("copied");
+        }, 1600);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text, done); });
+        navigator.clipboard.writeText(text).then(done, function () {
+          fallbackCopy(text, done);
+        });
       } else {
         fallbackCopy(text, done);
       }
     });
     pre.appendChild(btn);
   });
+
   function fallbackCopy(text, cb) {
     var ta = document.createElement("textarea");
     ta.value = text;
@@ -32,13 +38,16 @@ document.addEventListener("DOMContentLoaded", function () {
     ta.style.opacity = "0";
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand("copy"); } catch (e) {}
+    try {
+      document.execCommand("copy");
+    } catch (e) {}
     document.body.removeChild(ta);
     cb();
   }
 
   var links = Array.prototype.slice.call(document.querySelectorAll("#toc a"));
   if (!links.length) return;
+
   var sections = links
     .map(function (a) {
       return document.querySelector(a.getAttribute("href"));
@@ -55,21 +64,29 @@ document.addEventListener("DOMContentLoaded", function () {
   var observer = new IntersectionObserver(
     function (entries) {
       entries.forEach(function (entry) {
-        if (entry.isIntersecting) entry.target.setAttribute("data-on-screen", "");
-        else entry.target.removeAttribute("data-on-screen");
+        if (entry.isIntersecting) {
+          entry.target.setAttribute("data-on-screen", "");
+        } else {
+          entry.target.removeAttribute("data-on-screen");
+        }
       });
       updateFromView();
     },
     { rootMargin: "0px 0px -40% 0px", threshold: 0 }
   );
 
+  // The active lesson is the last one whose heading is still on screen.
   function updateFromView() {
     var current = null;
     for (var i = 0; i < sections.length; i++) {
-      if (sections[i].hasAttribute("data-on-screen")) current = sections[i];
+      if (sections[i].hasAttribute("data-on-screen")) {
+        current = sections[i];
+      }
     }
     if (current) setActive(current.id);
   }
 
-  sections.forEach(function (s) { observer.observe(s); });
+  sections.forEach(function (s) {
+    observer.observe(s);
+  });
 });
