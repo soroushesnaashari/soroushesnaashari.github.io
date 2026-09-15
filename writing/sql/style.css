@@ -57,7 +57,7 @@ header nav a.active {
   color: #000;
 }
 
-/* ---------- Article title (matches firstblog/secondblog pattern) ---------- */
+/* ---------- Article title ---------- */
 
 .article-header h2 {
   margin: 0;
@@ -81,8 +81,7 @@ header nav a.active {
 /* ---------- Global text justification ---------- */
 .intro p,
 section.lesson p,
-section.lesson li,
-.arch-diagram figcaption {
+section.lesson li {
   text-align: justify;
   hyphens: auto;
   text-justify: inter-word;
@@ -111,6 +110,7 @@ section.lesson li,
 section.lesson {
   scroll-margin-top: 2rem;
 }
+
 section.lesson h2 {
   margin: 3rem 0 0.5rem 0;
   font-weight: 600;
@@ -144,6 +144,7 @@ section.lesson a {
   color: #444;
   text-decoration: underline;
 }
+
 section.lesson a:hover {
   color: #000;
 }
@@ -182,6 +183,7 @@ section.lesson ol {
   color: #1a7f37;
   border-color: #1a7f37;
 }
+
 code {
   font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
   font-size: 0.85rem;
@@ -207,7 +209,7 @@ pre code {
   line-height: 1.5;
 }
 
-/* ---------- Tables (markdown-like, minimal rules) ---------- */
+/* ---------- Tables ---------- */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -236,31 +238,20 @@ th code {
   white-space: nowrap;
 }
 
+/* ---------- Small notes ---------- */
+.note {
+  border-left: 3px solid currentColor;
+  padding-left: 0.8rem;
+  margin: 1.2rem 0;
+  font-size: 0.9rem;
+}
+
 /* ---------- Footer ---------- */
 
 footer {
   margin-top: 4rem;
   text-align: left;
   font-size: 0.7rem;
-}
-
-/* ---------- Architecture diagram (full page width) ---------- */
-
-.arch-diagram {
-  margin: 2rem 0 1rem 0;
-  width: 100%;
-}
-
-.arch-diagram svg {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.arch-diagram figcaption {
-  font-size: 0.85em;
-  opacity: 0.75;
-  margin-top: 8px;
 }
 
 footer a {
@@ -273,8 +264,6 @@ footer a:hover {
 }
 
 /* ---------- Right-rail table of contents ---------- */
-/* Fixed, vertically centered, numbers only; hover reveals the title
-   inline; the active section's number is highlighted. Hidden on mobile. */
 #toc {
   position: fixed;
   right: 2rem;
@@ -305,6 +294,7 @@ footer a:hover {
   text-decoration: none;
   max-width: 16rem;
 }
+
 #toc .toc-title {
   opacity: 0;
   transition: opacity 0.15s ease;
@@ -331,6 +321,7 @@ footer a:hover {
 #toc a:hover .toc-num {
   color: #000;
 }
+
 #toc li.active .toc-num {
   color: #000;
   font-weight: 700;
